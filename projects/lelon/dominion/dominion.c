@@ -745,6 +745,40 @@ static int treasureMapCard(struct gameState *state, int currentPlayer, int handP
     return -1;
 }
 
+/* 
+ * councilRoomCard 
+ * @param state 
+ * @param currentPlayer
+ * @param handPos
+ *
+ * Description: An action card which gives you +4 cards and +1 buy, then 
+ * each player draws a card. While this benefits the player, the downside
+ * is that it also benefits the opponent with another card. Some good 
+ * strategies are handsize attacks involving various other cards such as 
+ * Militia. 
+ */
+void councilRoomCard(struct gameState *state, int currentPlayer, int handPos) {
+    int i;
+
+    //+4 Cards
+    for (i = 0; i < 4; i++) {
+	    drawCard(currentPlayer, state);
+	}
+			
+    //+1 Buy
+    state->numBuys++;
+			
+    //Each other player draws a card
+    for (i = 0; i < state->numPlayers; i++) {
+	    if ( i != currentPlayer ) {
+	        drawCard(i, state);
+	    }
+	}
+			
+    //put played card in played card pile
+    discardCard(handPos, currentPlayer, state, 0);
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
@@ -791,27 +825,28 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 			
     case council_room:
+      councilRoomCard(state, currentPlayer, handPos);
       //+4 Cards
-      for (i = 0; i < 4; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //+1 Buy
-      state->numBuys++;
-			
-      //Each other player draws a card
-      for (i = 0; i < state->numPlayers; i++)
-	{
-	  if ( i != currentPlayer )
-	    {
-	      drawCard(i, state);
-	    }
-	}
-			
-      //put played card in played card pile
-      discardCard(handPos, currentPlayer, state, 0);
-			
+    //  for (i = 0; i < 4; i++)
+	//{
+	//  drawCard(currentPlayer, state);
+	//}
+	//		
+    //  //+1 Buy
+    //  state->numBuys++;
+	//		
+    //  //Each other player draws a card
+    //  for (i = 0; i < state->numPlayers; i++)
+	//{
+	//  if ( i != currentPlayer )
+	//    {
+	//      drawCard(i, state);
+	//    }
+	//}
+	//		
+    //  //put played card in played card pile
+    //  discardCard(handPos, currentPlayer, state, 0);
+	//		
       return 0;
 			
     case feast:
