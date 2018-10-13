@@ -643,12 +643,16 @@ int getCost(int cardNumber)
   return -1;
 }
 
-/*
+/* 
+ * adventurerCard
+ * @param state 
+ * @param currentPlayer
  *
- *
- *
+ * Description: An action card that searches through your deck for 2 treasure cards.
+ * It has been stated that since this card costs just as much as gold, it is hard 
+ * to find a good use for it. One strategy is to use it to trash coppers. 
  */
-void adventurerCard(struct gameState *state, int currentPlayer) {
+static void adventurerCard(struct gameState *state, int currentPlayer) {
     int drawntreasure=0;     
     int cardDrawn;
     int z=0;
@@ -677,6 +681,27 @@ void adventurerCard(struct gameState *state, int currentPlayer) {
     }
 }
 
+/* 
+ * smithyCard
+ * @param state 
+ * @param currentPlayer
+ *
+ * Description: An action card that allows you to draw 3 cards in the same turn 
+ * and increases your hand size. This card is often used with the Big Money 
+ * strategy and is one of the most basic but most effective strategies.
+ */
+static void smithyCard(struct gameState *state, int currentPlayer, int handPos) {
+    int i;
+
+    //+3 Cards
+    for (i = 0; i < 3; i++) {
+	    drawCard(currentPlayer, state);
+	}
+			
+    //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
@@ -701,7 +726,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-        adventurerCard(state, currentPlayer);
+      adventurerCard(state, currentPlayer);
     //  while(drawntreasure<2){
 	//if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
 	//  shuffle(currentPlayer, state);
@@ -864,14 +889,15 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      smithyCard(state, currentPlayer, handPos);
+    //  //+3 Cards
+    //  for (i = 0; i < 3; i++)
+	//{
+	//  drawCard(currentPlayer, state);
+	//}
+	//		
+    //  //discard card from hand
+    //  discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
     case village:
