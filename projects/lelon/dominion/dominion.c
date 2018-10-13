@@ -685,6 +685,7 @@ static void adventurerCard(struct gameState *state, int currentPlayer) {
  * smithyCard
  * @param state 
  * @param currentPlayer
+ * @param handPos
  *
  * Description: An action card that allows you to draw 3 cards in the same turn 
  * and increases your hand size. This card is often used with the Big Money 
@@ -702,13 +703,55 @@ static void smithyCard(struct gameState *state, int currentPlayer, int handPos) 
     discardCard(handPos, currentPlayer, state, 0);
 }
 
+/* 
+ * treasureMapCard
+ * @param state 
+ * @param currentPlayer
+ * @param handPos
+ *
+ * Description: This action card is only useful if you have 2 in your 
+ * hand. Trashing both cards will get you 4 Gold cards to put into 
+ * your deck. The negative aspect about this card is that trashing 
+ * only 1 Treasure Map gives the player nothing. 
+ */
+static int treasureMapCard(struct gameState *state, int currentPlayer, int handPos) {
+    int i;
+    //search hand for another treasure_map
+    int index = -1;
+
+    for (i = 0; i < state->handCount[currentPlayer]; i++) {
+	    if (state->hand[currentPlayer][i] == treasure_map && i != handPos) {
+            index = i;
+            break;
+	    }
+	}
+
+    if (index > -1) {
+        //trash both treasure cards
+        discardCard(handPos, currentPlayer, state, 1);
+        discardCard(index, currentPlayer, state, 1);
+
+        //gain 4 Gold cards
+        for (i = 0; i < 4; i++)
+        {
+          gainCard(gold, state, 1, currentPlayer);
+        }
+                
+        //return success
+        return 1;
+	}
+			
+    //no second treasure_map found in hand
+    return -1;
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
   int j;
   int k;
   int x;
-  int index;
+  //int index;
   int currentPlayer = whoseTurn(state);
   int nextPlayer = currentPlayer + 1;
 
@@ -1251,34 +1294,35 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case treasure_map:
+      return treasureMapCard(state, currentPlayer, handPos);
       //search hand for another treasure_map
-      index = -1;
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == treasure_map && i != handPos)
-	    {
-	      index = i;
-	      break;
-	    }
-	}
-      if (index > -1)
-	{
-	  //trash both treasure cards
-	  discardCard(handPos, currentPlayer, state, 1);
-	  discardCard(index, currentPlayer, state, 1);
+    //  index = -1;
+    //  for (i = 0; i < state->handCount[currentPlayer]; i++)
+	//{
+	//  if (state->hand[currentPlayer][i] == treasure_map && i != handPos)
+	//    {
+	//      index = i;
+	//      break;
+	//    }
+	//}
+    //  if (index > -1)
+	//{
+	//  //trash both treasure cards
+	//  discardCard(handPos, currentPlayer, state, 1);
+	//  discardCard(index, currentPlayer, state, 1);
 
-	  //gain 4 Gold cards
-	  for (i = 0; i < 4; i++)
-	    {
-	      gainCard(gold, state, 1, currentPlayer);
-	    }
-				
-	  //return success
-	  return 1;
-	}
-			
-      //no second treasure_map found in hand
-      return -1;
+	//  //gain 4 Gold cards
+	//  for (i = 0; i < 4; i++)
+	//    {
+	//      gainCard(gold, state, 1, currentPlayer);
+	//    }
+	//			
+	//  //return success
+	//  return 1;
+	//}
+	//		
+    //  //no second treasure_map found in hand
+    //  return -1;
     }
 	
   return -1;
