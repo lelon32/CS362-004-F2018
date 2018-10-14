@@ -779,21 +779,40 @@ void councilRoomCard(struct gameState *state, int currentPlayer, int handPos) {
     discardCard(handPos, currentPlayer, state, 0);
 }
 
+/* 
+ * greatHallCard
+ * @param state 
+ * @param currentPlayer
+ * @param handPos
+ *
+ * Description:  An action victory card and is a dual type card.  It 
+ * gives +1 card and +1 action. It can interact with other cards which 
+ * affect Victory cards and cards that affect Action cards as well. 
+ * When used with Ironworks, this card is a strong combo.
+ */
+void greatHallCard(struct gameState *state, int currentPlayer, int handPos) {
+    //+1 Card
+    drawCard(currentPlayer, state);
+	  	
+    //+1 Actions
+    state->numActions++;
+	  	
+    //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
   int j;
   int k;
   int x;
-  //int index;
   int currentPlayer = whoseTurn(state);
   int nextPlayer = currentPlayer + 1;
 
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
-  //int drawntreasure=0;
-  //int cardDrawn;
-  //int z = 0;// this is the counter for the temp hand
+
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
@@ -804,49 +823,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     {
     case adventurer:
       adventurerCard(state, currentPlayer);
-    //  while(drawntreasure<2){
-	//if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
-	//  shuffle(currentPlayer, state);
-	//}
-	//drawCard(currentPlayer, state);
-	//cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-	//if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
-	//  drawntreasure++;
-	//else{
-	//  temphand[z]=cardDrawn;
-	//  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
-	//  z++;
-	//}
-    //  }
-    //  while(z-1>=0){
-	//state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
-	//z=z-1;
-    //  }
       return 0;
 			
     case council_room:
       councilRoomCard(state, currentPlayer, handPos);
-      //+4 Cards
-    //  for (i = 0; i < 4; i++)
-	//{
-	//  drawCard(currentPlayer, state);
-	//}
-	//		
-    //  //+1 Buy
-    //  state->numBuys++;
-	//		
-    //  //Each other player draws a card
-    //  for (i = 0; i < state->numPlayers; i++)
-	//{
-	//  if ( i != currentPlayer )
-	//    {
-	//      drawCard(i, state);
-	//    }
-	//}
-	//		
-    //  //put played card in played card pile
-    //  discardCard(handPos, currentPlayer, state, 0);
-	//		
       return 0;
 			
     case feast:
@@ -968,14 +948,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case smithy:
       smithyCard(state, currentPlayer, handPos);
-    //  //+3 Cards
-    //  for (i = 0; i < 3; i++)
-	//{
-	//  drawCard(currentPlayer, state);
-	//}
-	//		
-    //  //discard card from hand
-    //  discardCard(handPos, currentPlayer, state, 0);
       return 0;
 		
     case village:
@@ -1041,14 +1013,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case great_hall:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+1 Actions
-      state->numActions++;
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      greatHallCard(state, currentPlayer, handPos);
       return 0;
 		
     case minion:
@@ -1330,34 +1295,6 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case treasure_map:
       return treasureMapCard(state, currentPlayer, handPos);
-      //search hand for another treasure_map
-    //  index = -1;
-    //  for (i = 0; i < state->handCount[currentPlayer]; i++)
-	//{
-	//  if (state->hand[currentPlayer][i] == treasure_map && i != handPos)
-	//    {
-	//      index = i;
-	//      break;
-	//    }
-	//}
-    //  if (index > -1)
-	//{
-	//  //trash both treasure cards
-	//  discardCard(handPos, currentPlayer, state, 1);
-	//  discardCard(index, currentPlayer, state, 1);
-
-	//  //gain 4 Gold cards
-	//  for (i = 0; i < 4; i++)
-	//    {
-	//      gainCard(gold, state, 1, currentPlayer);
-	//    }
-	//			
-	//  //return success
-	//  return 1;
-	//}
-	//		
-    //  //no second treasure_map found in hand
-    //  return -1;
     }
 	
   return -1;
