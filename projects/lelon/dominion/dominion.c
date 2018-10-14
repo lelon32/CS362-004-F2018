@@ -645,8 +645,8 @@ int getCost(int cardNumber)
 
 /* 
  * adventurerCard
- * @param state 
- * @param currentPlayer
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
  *
  * Description: An action card that searches through your deck for 2 treasure cards.
  * It has been stated that since this card costs just as much as gold, it is hard 
@@ -683,8 +683,8 @@ static void adventurerCard(struct gameState *state, int currentPlayer) {
 
 /* 
  * smithyCard
- * @param state 
- * @param currentPlayer
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
  * @param handPos
  *
  * Description: An action card that allows you to draw 3 cards in the same turn 
@@ -705,8 +705,8 @@ static void smithyCard(struct gameState *state, int currentPlayer, int handPos) 
 
 /* 
  * treasureMapCard
- * @param state 
- * @param currentPlayer
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
  * @param handPos
  *
  * Description: This action card is only useful if you have 2 in your 
@@ -747,8 +747,8 @@ static int treasureMapCard(struct gameState *state, int currentPlayer, int handP
 
 /* 
  * councilRoomCard 
- * @param state 
- * @param currentPlayer
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
  * @param handPos
  *
  * Description: An action card which gives you +4 cards and +1 buy, then 
@@ -781,8 +781,8 @@ void councilRoomCard(struct gameState *state, int currentPlayer, int handPos) {
 
 /* 
  * greatHallCard
- * @param state 
- * @param currentPlayer
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
  * @param handPos
  *
  * Description:  An action victory card and is a dual type card.  It 
