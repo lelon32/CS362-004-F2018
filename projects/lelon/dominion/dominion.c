@@ -651,14 +651,19 @@ int getCost(int cardNumber)
  * Description: An action card that searches through your deck for 2 treasure cards.
  * It has been stated that since this card costs just as much as gold, it is hard 
  * to find a good use for it. One strategy is to use it to trash coppers. 
+ *
+ * Bugs introduced: 
+ * 1. While loop conditional changed from drawntreasure<2 to drawntreasure<3  
+ * 2. Added sea_hag and salvager to drawn cards list which increase drawntreasure count.
+ * 3. Changes MAX_HAND for temphand to be 4.
  */
 static void adventurerCard(struct gameState *state, int currentPlayer) {
     int drawntreasure=0;     
     int cardDrawn;
     int z=0;
-    int temphand[MAX_HAND];
+    int temphand[4];
 
-    while(drawntreasure<2){
+    while(drawntreasure<3){
 	    if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
 	        shuffle(currentPlayer, state);
 	    }
@@ -666,7 +671,7 @@ static void adventurerCard(struct gameState *state, int currentPlayer) {
         drawCard(currentPlayer, state);
         cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
 
-        if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
+        if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold || cardDrawn == sea_hag || cardDrawn == salvager)
             drawntreasure++;
         else{
             temphand[z]=cardDrawn;
@@ -690,13 +695,18 @@ static void adventurerCard(struct gameState *state, int currentPlayer) {
  * Description: An action card that allows you to draw 3 cards in the same turn 
  * and increases your hand size. This card is often used with the Big Money 
  * strategy and is one of the most basic but most effective strategies.
+ *
+ * Bugs introduced: 
+ * 1. Changed for loop index i to reach 2 instead of 3. 
+ * 2. Added +1 to currentPlayer drawCard function call.
+ *
  */
 static void smithyCard(struct gameState *state, int currentPlayer, int handPos) {
     int i;
 
     //+3 Cards
-    for (i = 0; i < 3; i++) {
-	    drawCard(currentPlayer, state);
+    for (i = 0; i < 2; i++) {
+	    drawCard(currentPlayer+1, state);
 	}
 			
     //discard card from hand
@@ -713,11 +723,15 @@ static void smithyCard(struct gameState *state, int currentPlayer, int handPos) 
  * hand. Trashing both cards will get you 4 Gold cards to put into 
  * your deck. The negative aspect about this card is that trashing 
  * only 1 Treasure Map gives the player nothing. 
+ *
+ * Bugs introduced:
+ * 1. index initiated with 1 instead of 0. 
+ * 2. Changed gain 4 treasure cards count to increase +=2. 
  */
 static int treasureMapCard(struct gameState *state, int currentPlayer, int handPos) {
     int i;
     //search hand for another treasure_map
-    int index = -1;
+    int index = 1;
 
     for (i = 0; i < state->handCount[currentPlayer]; i++) {
 	    if (state->hand[currentPlayer][i] == treasure_map && i != handPos) {
@@ -732,7 +746,7 @@ static int treasureMapCard(struct gameState *state, int currentPlayer, int handP
         discardCard(index, currentPlayer, state, 1);
 
         //gain 4 Gold cards
-        for (i = 0; i < 4; i++)
+        for (i = 0; i < 4; i+=2)
         {
           gainCard(gold, state, 1, currentPlayer);
         }
@@ -756,6 +770,11 @@ static int treasureMapCard(struct gameState *state, int currentPlayer, int handP
  * is that it also benefits the opponent with another card. Some good 
  * strategies are handsize attacks involving various other cards such as 
  * Militia. 
+ *
+ * Bugs introduced:
+ * 1. Altered the for loop to only allow the player of the card to draw
+ * a card, instead of all players.
+ * 2. Added 15 additional drawCard calls. The player draws 16 additional cards. 
  */
 void councilRoomCard(struct gameState *state, int currentPlayer, int handPos) {
     int i;
@@ -769,8 +788,23 @@ void councilRoomCard(struct gameState *state, int currentPlayer, int handPos) {
     state->numBuys++;
 			
     //Each other player draws a card
-    for (i = 0; i < state->numPlayers; i++) {
+    for (i = 0; i < 1; i++) {
 	    if ( i != currentPlayer ) {
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
 	        drawCard(i, state);
 	    }
 	}
