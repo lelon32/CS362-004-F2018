@@ -657,7 +657,7 @@ int getCost(int cardNumber)
  * 2. Added sea_hag and salvager to drawn cards list which increase drawntreasure count.
  * 3. Changes MAX_HAND for temphand to be 4.
  */
-static void adventurerCard(struct gameState *state, int currentPlayer) {
+void adventurerCard(struct gameState *state, int currentPlayer) {
     int drawntreasure=0;     
     int cardDrawn;
     int z=0;
@@ -701,7 +701,7 @@ static void adventurerCard(struct gameState *state, int currentPlayer) {
  * 2. Added +1 to currentPlayer drawCard function call.
  *
  */
-static void smithyCard(struct gameState *state, int currentPlayer, int handPos) {
+void smithyCard(struct gameState *state, int currentPlayer, int handPos) {
     int i;
 
     //+3 Cards
@@ -728,7 +728,7 @@ static void smithyCard(struct gameState *state, int currentPlayer, int handPos) 
  * 1. index initiated with 1 instead of 0. 
  * 2. Changed gain 4 treasure cards count to increase +=2. 
  */
-static int treasureMapCard(struct gameState *state, int currentPlayer, int handPos) {
+int treasureMapCard(struct gameState *state, int currentPlayer, int handPos) {
     int i;
     //search hand for another treasure_map
     int index = 1;
