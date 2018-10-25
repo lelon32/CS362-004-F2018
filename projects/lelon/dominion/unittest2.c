@@ -6,8 +6,9 @@
  * Instructor: Jaki Shaik
  * Assignment 3 
  * Description: Unit test program for function smithyCard().
- * 1. Tests how many treasure cards can be drawn.
- * 2. Tests if other cards count as treasure cards.
+ * 1. Tests how many cards were drawn by each player. 
+ * 2. Check if cards were drawn from the user's deck. 
+ * 3. Check if the state of victory and kingdom cards have changed.
  * NOTE: testUpdateCoins.c was used as a base template.
  *************************************************************************/
 
@@ -48,6 +49,12 @@ int main() {
     G.handCount[p] = handCount;                 // set the number of cards on hand
     memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
 
+    // For Test 3
+    int victoryCardPileCount = G.supplyCount[estate] + G.supplyCount[duchy] + G.supplyCount[province];
+    int kingdom[10];
+    for(i=0; i<10; i++) {
+        kingdom[i] = k[i];
+    }
     
     // Clear all treasure cards.
     int count;
@@ -59,11 +66,16 @@ int main() {
    
 /***************************TEST 1*******************************/
       /**Check how many cards were drawn by each player*/
+
+#if (NOISY_TEST == 1)
+        printf("\nTest 1 - verify players' drawn cards");
+#endif
+    const int setDeckCount = 5;
     
     // set all player's cards in hand to 0 and decks to 3.
     for(i=0; i<numPlayer; i++) {
         G.handCount[i] = 0;
-        G.deckCount[i] = 5;
+        G.deckCount[i] = setDeckCount;
 
         // all cards in decks will be smithy
         for(int j=0; j<5; j++) {
@@ -77,121 +89,72 @@ int main() {
     G.hand[playerBeingTested][0] = smithy;
     smithyCard(&G, 0, 0); 
 
+    int testResults;
     // test how many cards each player has
     for(i=0; i<numPlayer; i++) {
 #if (NOISY_TEST == 1)
         printf("\nPlayer %d card on hand count is: %d\n", i, G.handCount[i]);
 #endif
         if(i==playerBeingTested) {
-            testsPassed = assertion(G.handCount[playerBeingTested] == 3);
+            testResults = assertion(G.handCount[playerBeingTested] == 3);
 
-            if(!testsPassed) {
-                printf("\nTEST FAIL: Player %d should have drawn 3 cards!\n", playerBeingTested);
+            if(!testResults) {
+                printf("\nERROR: Player %d should have drawn 3 cards!\n", playerBeingTested);
+                testsPassed = 0;
             }
         } else {
-            testsPassed = assertion(G.handCount[i] == 0);
+            testResults = assertion(G.handCount[i] == 0);
 
-            if(!testsPassed) {
-                printf("\nTEST FAIL: Player %d should drawn 0 cards!\n", i);
+            if(!testResults) {
+                printf("\nERROR: Player %d should drawn 0 cards!\n", i);
+                testsPassed = 0;
             }
         }
     }
     printf("\n");
 
 
-//    // Put 1 treasure cards in deck
-//    G.deck[p][0] = copper;
-//#if (NOISY_TEST == 1)
-//    printf("Test 1 - check how many treasure cards are added.\n\n");
-//#endif
-//
-//#if (NOISY_TEST == 1)
-//    printf("Testing with 1 treasure card in deck.\nOnly 1 card should be added to hand.\n");
-//#endif
-//    int origCardsInHand = G.handCount[p];
-//
-//    adventurerCard(&G, p);
-//
-//#if (NOISY_TEST == 1)
-//    testsPassed = assertion(G.handCount[p]==origCardsInHand+1);
-//    if(!testsPassed) {
-//        printf("%d card(s) were added.\n", G.handCount[p]-origCardsInHand);
-//    }
-//#endif
-//
-//    origCardsInHand = G.handCount[p];
-//    G.deckCount[p] = maxDeckCount; // reset
-//
-//#if (NOISY_TEST == 1)
-//    printf("Testing with 2 treasure cards in deck.\n2 cards should be added to hand.\n");
-//#endif
-//    // Put 2 treasure cards in deck
-//    G.deck[p][0] = copper; 
-//    G.deck[p][1] = silver; 
-//    adventurerCard(&G, p);
-//
-//#if (NOISY_TEST == 1)
-//    testsPassed = assertion(G.handCount[p]==origCardsInHand+2);
-//    if(!testsPassed) {
-//        printf("%d card(s) were added.\n", G.handCount[p]-origCardsInHand);
-//    }
-//#endif
-//
-//    origCardsInHand = G.handCount[p];
-//    G.deckCount[p] = maxDeckCount; // reset
-//
-//#if (NOISY_TEST == 1)
-//    printf("Testing with 3 treasure cards in deck.\nOnly 2 cards should be added to hand.\n");
-//#endif
-//    // Put 3 treasure cards in deck
-//    G.deck[p][0] = copper; 
-//    G.deck[p][1] = silver;
-//    G.deck[p][2] = gold; 
-//    adventurerCard(&G, p);
-//
-//#if (NOISY_TEST == 1)
-//    testsPassed = assertion(G.handCount[p]==origCardsInHand+2);
-//    if(!testsPassed) {
-//        printf("%d card(s) were added.\n", G.handCount[p]-origCardsInHand);
-//    }
-//#endif
-//
-///***************************TEST 2*******************************/
-///**Check if cards other than treasure cards are counted as treasure cards*/
-//#if (NOISY_TEST == 1)
-//    printf("\nTest 3 - check if other cards are counted as a treasure card.\n\n");
-//#endif
-//    int maxCardTypes = 27;
-//    int passing = 1;
-//    int j;
-//    G.deckCount[p] = maxDeckCount;
-//
-//
-//    // Check every card in the game.
-//    for(i=0; i<maxCardTypes && passing == 1; i++) {
-//        // reset
-//        G.handCount[p] = 0;
-//        G.deckCount[p] = maxDeckCount;
-//
-//#if (NOISY_TEST == 1)
-//        printf("\nChecking card %d\n", i);
-//#endif
-//        if(i < 4 || i > 6) { // only test on non-treasure cards.
-//            for(j=0; j<maxDeckCount; j++) {
-//                G.deck[p][0] = i;    
-//            }
-//
-//            adventurerCard(&G, p);
-//            passing = assertion(G.handCount[p]>1);
-//
-//            if(!passing) {
-//                printf("Card %d counted as a treasure card!\n", i);
-//                testsPassed = 0;
-//                break;
-//            }
-//
-//        }
-//    }
+/***************************TEST 2*******************************/
+      /**Check if card was drawn from current player's deck.*/
+#if (NOISY_TEST == 1)
+        printf("\nTest 2 - verify if the user's deck was drawn from\n");
+#endif
+    testResults = assertion(G.deckCount[playerBeingTested] < setDeckCount );
+
+    if(!testResults) {
+        printf("\nERROR: Player %d's deck was not drawn from!\n", playerBeingTested);
+        testsPassed = 0;
+    } 
+
+
+/***************************TEST 3*******************************/
+      /**Check if victory card piles or kingdom card piles changed.*/
+#if (NOISY_TEST == 1)
+        printf("\nTest 3 - verify if the victory card or kingdom card piles were not changed\n");
+        printf("\nTesting count of victory cards.\n");
+#endif
+
+    // Test count of victory cards
+    int newVictoryCardCount = G.supplyCount[estate] + G.supplyCount[duchy] + G.supplyCount[province];
+    testResults = assertion(victoryCardPileCount == newVictoryCardCount); 
+
+    if(!testResults) {
+        printf("\nERROR: Count of victory cards changed from %d to %d!\n", victoryCardPileCount, newVictoryCardCount);
+        testsPassed = 0;
+    }
+
+    // Test state of kingdom cards
+    for(i=0; i<10; i++) {
+#if (NOISY_TEST == 1)
+        printf("\nTesting kingdom card #%d\n", i);
+#endif
+        testResults = assertion(kingdom[i] == k[i]);
+        if(!testResults){
+            testsPassed = 0;
+            printf("\nERROR: card #%d is %d but was originally %d!\n", i, k[i], kingdom[i]);
+        }
+    }
+
 
     if(testsPassed) {
         printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
@@ -214,7 +177,7 @@ int assertion(int a) {
     }
 
 #if (NOISY_TEST == 1)
-    printf("TEST PASSED\n\n");    
+    printf("TEST PASSED\n");    
 #endif
     return 1;
 }

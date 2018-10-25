@@ -148,7 +148,6 @@ int main() {
             if(!passing) {
                 printf("Card %d counted as a treasure card!\n", i);
                 testsPassed = 0;
-                break;
             }
 
         }
