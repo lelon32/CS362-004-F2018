@@ -146,7 +146,7 @@ int main() {
             passing = assertion(G.handCount[p]>1);
 
             if(!passing) {
-                printf("Card %d counted as a treasure card!\n", i);
+                printf("ERROR: Card %d counted as a treasure card!\n", i);
                 testsPassed = 0;
             }
 

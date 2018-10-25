@@ -106,7 +106,7 @@ int main() {
             testResults = assertion(G.handCount[i] == 0);
 
             if(!testResults) {
-                printf("\nERROR: Player %d should drawn 0 cards!\n", i);
+                printf("\nERROR: Player %d should have drawn 0 cards!\n", i);
                 testsPassed = 0;
             }
         }
