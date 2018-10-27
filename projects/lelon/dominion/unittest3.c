@@ -6,6 +6,7 @@
  * Instructor: Jaki Shaik
  * Assignment 3 
  * Description: Unit test program for function treasureMapCard().
+ * Test 1 - Tests the effects of using the treasureMapCard function.
  * NOTE: testUpdateCoins.c was used as a base template.
  *************************************************************************/
 
