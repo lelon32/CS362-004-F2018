@@ -6,6 +6,8 @@
  * Instructor: Jaki Shaik
  * Assignment 3 
  * Description: Unit test program for function Council Room Card.
+ * Checks how many cards were drawn by each player and where the card was
+ * drawn from.
  * NOTE: testUpdateCoins.c was used as a base template.
  *************************************************************************/
 
