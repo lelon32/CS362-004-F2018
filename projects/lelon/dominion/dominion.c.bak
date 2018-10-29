@@ -643,21 +643,210 @@ int getCost(int cardNumber)
   return -1;
 }
 
+/* 
+ * adventurerCard
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
+ *
+ * Description: An action card that searches through your deck for 2 treasure cards.
+ * It has been stated that since this card costs just as much as gold, it is hard 
+ * to find a good use for it. One strategy is to use it to trash coppers. 
+ *
+ * Bugs introduced: 
+ * 1. While loop conditional changed from drawntreasure<2 to drawntreasure<3  
+ * 2. Added sea_hag and salvager to drawn cards list which increase drawntreasure count.
+ * 3. Changes MAX_HAND for temphand to be 4.
+ */
+void adventurerCard(struct gameState *state, int currentPlayer) {
+    int drawntreasure=0;     
+    int cardDrawn;
+    int z=0;
+    int temphand[4];
+
+    while(drawntreasure<3){
+	    if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
+	        shuffle(currentPlayer, state);
+	    }
+
+        drawCard(currentPlayer, state);
+        cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
+
+        if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold || cardDrawn == sea_hag || cardDrawn == salvager)
+            drawntreasure++;
+        else{
+            temphand[z]=cardDrawn;
+            state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
+            z++;
+        }
+    }
+
+    while(z-1>=0){
+	    state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
+	    z=z-1;
+    }
+}
+
+/* 
+ * smithyCard
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
+ * @param handPos
+ *
+ * Description: An action card that allows you to draw 3 cards in the same turn 
+ * and increases your hand size. This card is often used with the Big Money 
+ * strategy and is one of the most basic but most effective strategies.
+ *
+ * Bugs introduced: 
+ * 1. Changed for loop index i to reach 2 instead of 3. 
+ * 2. Added +1 to currentPlayer drawCard function call.
+ *
+ */
+void smithyCard(struct gameState *state, int currentPlayer, int handPos) {
+    int i;
+
+    //+3 Cards
+    for (i = 0; i < 2; i++) {
+	    drawCard(currentPlayer+1, state);
+	}
+			
+    //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+}
+
+/* 
+ * treasureMapCard
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
+ * @param handPos
+ *
+ * Description: This action card is only useful if you have 2 in your 
+ * hand. Trashing both cards will get you 4 Gold cards to put into 
+ * your deck. The negative aspect about this card is that trashing 
+ * only 1 Treasure Map gives the player nothing. 
+ *
+ * Bugs introduced:
+ * 1. index initiated with 1 instead of 0. 
+ * 2. Changed gain 4 treasure cards count to increase +=2. 
+ */
+int treasureMapCard(struct gameState *state, int currentPlayer, int handPos) {
+    int i;
+    //search hand for another treasure_map
+    int index = 1;
+
+    for (i = 0; i < state->handCount[currentPlayer]; i++) {
+	    if (state->hand[currentPlayer][i] == treasure_map && i != handPos) {
+            index = i;
+            break;
+	    }
+	}
+
+    if (index > -1) {
+        //trash both treasure cards
+        discardCard(handPos, currentPlayer, state, 1);
+        discardCard(index, currentPlayer, state, 1);
+
+        //gain 4 Gold cards
+        for (i = 0; i < 4; i+=2)
+        {
+          gainCard(gold, state, 1, currentPlayer);
+        }
+                
+        //return success
+        return 1;
+	}
+			
+    //no second treasure_map found in hand
+    return -1;
+}
+
+/* 
+ * councilRoomCard 
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
+ * @param handPos
+ *
+ * Description: An action card which gives you +4 cards and +1 buy, then 
+ * each player draws a card. While this benefits the player, the downside
+ * is that it also benefits the opponent with another card. Some good 
+ * strategies are handsize attacks involving various other cards such as 
+ * Militia. 
+ *
+ * Bugs introduced:
+ * 1. Altered the for loop to only allow the player of the card to draw
+ * a card, instead of all players.
+ * 2. Added 15 additional drawCard calls. The player draws 16 additional cards. 
+ */
+void councilRoomCard(struct gameState *state, int currentPlayer, int handPos) {
+    int i;
+
+    //+4 Cards
+    for (i = 0; i < 4; i++) {
+	    drawCard(currentPlayer, state);
+	}
+			
+    //+1 Buy
+    state->numBuys++;
+			
+    //Each other player draws a card
+    for (i = 0; i < 1; i++) {
+	    if ( i != currentPlayer ) {
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	        drawCard(i, state);
+	    }
+	}
+			
+    //put played card in played card pile
+    discardCard(handPos, currentPlayer, state, 0);
+}
+
+/* 
+ * greatHallCard
+ * @param state - pointer to gameState struct 
+ * @param currentPlayer - current player's turn 
+ * @param handPos
+ *
+ * Description:  An action victory card and is a dual type card.  It 
+ * gives +1 card and +1 action. It can interact with other cards which 
+ * affect Victory cards and cards that affect Action cards as well. 
+ * When used with Ironworks, this card is a strong combo.
+ */
+void greatHallCard(struct gameState *state, int currentPlayer, int handPos) {
+    //+1 Card
+    drawCard(currentPlayer, state);
+	  	
+    //+1 Actions
+    state->numActions++;
+	  	
+    //discard card from hand
+    discardCard(handPos, currentPlayer, state, 0);
+}
+
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
   int i;
   int j;
   int k;
   int x;
-  int index;
   int currentPlayer = whoseTurn(state);
   int nextPlayer = currentPlayer + 1;
 
   int tributeRevealedCards[2] = {-1, -1};
   int temphand[MAX_HAND];// moved above the if statement
-  int drawntreasure=0;
-  int cardDrawn;
-  int z = 0;// this is the counter for the temp hand
+
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
@@ -667,48 +856,11 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   switch( card ) 
     {
     case adventurer:
-      while(drawntreasure<2){
-	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
-	  shuffle(currentPlayer, state);
-	}
-	drawCard(currentPlayer, state);
-	cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];//top card of hand is most recently drawn card.
-	if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
-	  drawntreasure++;
-	else{
-	  temphand[z]=cardDrawn;
-	  state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
-	  z++;
-	}
-      }
-      while(z-1>=0){
-	state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[z-1]; // discard all cards in play that have been drawn
-	z=z-1;
-      }
+      adventurerCard(state, currentPlayer);
       return 0;
 			
     case council_room:
-      //+4 Cards
-      for (i = 0; i < 4; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //+1 Buy
-      state->numBuys++;
-			
-      //Each other player draws a card
-      for (i = 0; i < state->numPlayers; i++)
-	{
-	  if ( i != currentPlayer )
-	    {
-	      drawCard(i, state);
-	    }
-	}
-			
-      //put played card in played card pile
-      discardCard(handPos, currentPlayer, state, 0);
-			
+      councilRoomCard(state, currentPlayer, handPos);
       return 0;
 			
     case feast:
@@ -829,14 +981,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case smithy:
-      //+3 Cards
-      for (i = 0; i < 3; i++)
-	{
-	  drawCard(currentPlayer, state);
-	}
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      smithyCard(state, currentPlayer, handPos);
       return 0;
 		
     case village:
@@ -902,14 +1047,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case great_hall:
-      //+1 Card
-      drawCard(currentPlayer, state);
-			
-      //+1 Actions
-      state->numActions++;
-			
-      //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      greatHallCard(state, currentPlayer, handPos);
       return 0;
 		
     case minion:
@@ -1190,34 +1328,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case treasure_map:
-      //search hand for another treasure_map
-      index = -1;
-      for (i = 0; i < state->handCount[currentPlayer]; i++)
-	{
-	  if (state->hand[currentPlayer][i] == treasure_map && i != handPos)
-	    {
-	      index = i;
-	      break;
-	    }
-	}
-      if (index > -1)
-	{
-	  //trash both treasure cards
-	  discardCard(handPos, currentPlayer, state, 1);
-	  discardCard(index, currentPlayer, state, 1);
-
-	  //gain 4 Gold cards
-	  for (i = 0; i < 4; i++)
-	    {
-	      gainCard(gold, state, 1, currentPlayer);
-	    }
-				
-	  //return success
-	  return 1;
-	}
-			
-      //no second treasure_map found in hand
-      return -1;
+      return treasureMapCard(state, currentPlayer, handPos);
     }
 	
   return -1;

@@ -44,7 +44,7 @@ int main() {
         cards[i] = adventurer;
     }
 
-    printf ("TESTING adventurerCard():\n\n");
+    printf ("TESTING adventurer card effects:\n\n");
     memset(&G, 23, sizeof(struct gameState));   // clear the game state
     initializeGame(numPlayer, k, seed, &G); // initialize a new game
     G.handCount[p] = handCount;                 // set the number of cards on hand
