@@ -1,11 +1,12 @@
 /************************************************************************* 
  * Program: unittest2
  * Author: Long Le
- * Date: 24-Oct-2018 
+ * Date: 26-Oct-2018 
  * Class: CS362
  * Instructor: Jaki Shaik
  * Assignment 3 
  * Description: Unit test program for function shuffle().
+ * Test to see if shuffle() function shuffles the deck.
  * NOTE: testUpdateCoins.c was used as a base template.
  *************************************************************************/
 

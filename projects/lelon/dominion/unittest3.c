@@ -1,12 +1,11 @@
 /************************************************************************* 
  * Program: unittest3
  * Author: Long Le
- * Date: 24-Oct-2018 
+ * Date: 28-Oct-2018 
  * Class: CS362
  * Instructor: Jaki Shaik
  * Assignment 3 
- * Description: Unit test program for function treasureMapCard().
- * Test 1 - Tests the effects of using the treasureMapCard function.
+ * Description: Unit test program for function isGameOver().
  * NOTE: testUpdateCoins.c was used as a base template.
  *************************************************************************/
 
@@ -41,7 +40,7 @@ int main() {
         cards[i] = adventurer;
     }
 
-    printf ("TESTING treasureMapCard():\n");
+    printf ("TESTING isGameOver():\n");
     memset(&G, 23, sizeof(struct gameState));   // clear the game state
     initializeGame(numPlayer, k, seed, &G); // initialize a new game
 //    G.handCount[p] = handCount;                 // set the number of cards on hand
@@ -51,102 +50,34 @@ int main() {
       /**Check how many cards were drawn by player*/
 
 #if (NOISY_TEST == 1)
-        printf("\nTest 1a - only 1 treasure map in player's hand\n");
+    printf("\nTest 1 - verify the game ends if there are no more province cards\n");
 #endif
-    int playerBeingTested = 0;
-    int goldCount = 0;;
-    
-    const int setDeckCount = 5;
-    
-    // set all player's cards in hand to 0 and decks.
-    for(i=0; i<numPlayer; i++) {
-        G.handCount[i] = 0;
-        G.deckCount[i] = setDeckCount;
-
-        // all cards in decks will be smithy
-        for(int j=0; j<setDeckCount; j++) {
-            G.deck[i][j] = smithy;
-        }
-    }
-
-    // count gold cards in deck
-    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
-        if(G.deck[playerBeingTested][i] == gold) {
-            ++goldCount;
-        }
-    }
-
-    printf("\n");
-    for(i=0; i<G.handCount[playerBeingTested]; i++) {
-        printf("cards: %d ", i);
-    }
-
-    G.handCount[playerBeingTested]++;
-    G.hand[playerBeingTested][0] = treasure_map;
-
-    int goldCount2nd = 0;
-
-    treasureMapCard(&G, playerBeingTested, 0);
-    
-    // count gold cards in deck
-    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
-        if(G.deck[playerBeingTested][i] == gold) {
-            ++goldCount2nd;
-        }
-    }
-
-    int testResults = assertion(goldCount == goldCount2nd); 
-
-    if(!testResults) {
-        printf("\nERROR: original gold count is %d and current gold count is %d\n", goldCount, goldCount2nd);
-        printf("ERROR: NO GOLD SHOULD BE ADDED TO DECK\n");
+    G.supplyCount[province] = 0;
+    if(!assertion(isGameOver(&G))) {
+        printf("\nERROR: Failed to end game when province cards = 0\n");    
         testsPassed = 0;
     }
 
-
-    // Test with 2 treasure map cards
+    G.supplyCount[province] = 1;
+    G.supplyCount[0] = 0;
+    G.supplyCount[1] = 0;
+    G.supplyCount[2] = 0;
 #if (NOISY_TEST == 1)
-        printf("\nTest 1b - 2 treasure map cards in player's hand\n");
+    printf("\nTest 2 - verify the game ends if there are 3 empty supply piles\n");
 #endif
-    G.handCount[playerBeingTested] = 0;
-    G.deckCount[playerBeingTested] = setDeckCount;
-
-    // all cards in decks will be smithy
-    for(int j=0; j<setDeckCount; j++) {
-        G.deck[playerBeingTested][j] = smithy;
-    }
-
-    // count gold cards in deck
-    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
-        if(G.deck[playerBeingTested][i] == gold) {
-            ++goldCount;
-        }
-    }
-
-    // add 2 treasure maps card to hand 
-    G.deck[playerBeingTested][0] = treasure_map;
-    G.deck[playerBeingTested][1] = treasure_map;
-    G.handCount[playerBeingTested] += 2;
-
-    goldCount2nd = 0;
-
-    treasureMapCard(&G, playerBeingTested, 0);
-    
-    // count gold cards in deck
-    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
-        if(G.deck[playerBeingTested][i] == gold) {
-            ++goldCount2nd;
-        }
-    }
-
-    testResults = assertion(goldCount2nd == goldCount+4); 
-
-    if(!testResults) {
-        printf("\nERROR: original gold count is %d and current gold count is %d\n", goldCount, goldCount2nd);
-        printf("ERROR: 4 gold cards should be received into deck\n");
+    if(!assertion(isGameOver(&G))) {
+        printf("\nERROR: Failed to end game when 3 supply piles are empty!\n");    
         testsPassed = 0;
     }
 
+    G.supplyCount[2] = 1;
+#if (NOISY_TEST == 1)
+    printf("\nTest 3 - verify the game continues if there are province cards\n and if there are less than 3 supply piles empty. \n");
+#endif
+    if(!assertion(!isGameOver(&G))) {
+        printf("\nERROR: Game ended when it was not supposed to!\n");    
+        testsPassed = 0;
+    }
 
     if(testsPassed) {
         printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
