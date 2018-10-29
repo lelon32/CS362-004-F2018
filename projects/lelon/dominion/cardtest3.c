@@ -41,7 +41,7 @@ int main() {
         cards[i] = adventurer;
     }
 
-    printf ("TESTING treasureMapCard():\n");
+    printf ("TESTING Treasure Map card effects:\n");
     memset(&G, 23, sizeof(struct gameState));   // clear the game state
     initializeGame(numPlayer, k, seed, &G); // initialize a new game
 //    G.handCount[p] = handCount;                 // set the number of cards on hand
@@ -86,7 +86,8 @@ int main() {
 
     int goldCount2nd = 0;
 
-    treasureMapCard(&G, playerBeingTested, 0);
+    //treasureMapCard(&G, playerBeingTested, 0);
+    cardEffect(treasure_map, 0, 0, 0, &G, 0, 0);
     
     // count gold cards in deck
     for(i=0; i<G.deckCount[playerBeingTested]; i++) {
@@ -130,8 +131,10 @@ int main() {
 
     goldCount2nd = 0;
 
-    treasureMapCard(&G, playerBeingTested, 0);
+    //treasureMapCard(&G, playerBeingTested, 0);
     
+    cardEffect(treasure_map, 0, 0, 0, &G, 0, 0);
+
     // count gold cards in deck
     for(i=0; i<G.deckCount[playerBeingTested]; i++) {
         if(G.deck[playerBeingTested][i] == gold) {
