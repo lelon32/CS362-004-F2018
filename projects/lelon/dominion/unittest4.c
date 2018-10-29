@@ -1,11 +1,11 @@
 /************************************************************************* 
  * Program: unittest4
  * Author: Long Le
- * Date: 26-Oct-2018 
+ * Date: 28-Oct-2018 
  * Class: CS362
  * Instructor: Jaki Shaik
  * Assignment 3 
- * Description: Unit test program for function councilRoomCard().
+ * Description: Unit test program for function drawCard().
  * NOTE: testUpdateCoins.c was used as a base template.
  *************************************************************************/
 
@@ -31,7 +31,7 @@ int main() {
                , remodel, smithy, village, baron, great_hall};
     struct gameState G;
     //int maxHandCount = 5;
-    int maxDeckCount = 4;
+    int maxDeckCount = 5;
 
     int cards[MAX_HAND]; 
     
@@ -40,87 +40,78 @@ int main() {
         cards[i] = adventurer;
     }
 
-    printf ("TESTING smithyCard():\n");
+    printf ("TESTING drawCard():\n");
     memset(&G, 23, sizeof(struct gameState));   // clear the game state
     initializeGame(numPlayer, k, seed, &G); // initialize a new game
     G.handCount[p] = handCount;                 // set the number of cards on hand
     memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
 
-    // For Test 3
-    int victoryCardPileCount = G.supplyCount[estate] + G.supplyCount[duchy] + G.supplyCount[province];
-    int kingdom[10];
-    for(i=0; i<10; i++) {
-        kingdom[i] = k[i];
-    }
-    
     // Clear all treasure cards.
     int count;
     for(count=0; count<maxDeckCount; count++) {
         G.deck[p][count] = adventurer; 
     }
 
-    G.deckCount[p] = maxDeckCount; // reset
-   
 /***************************TEST 1*******************************/
       /**Check how many cards were drawn by each player*/
 
 #if (NOISY_TEST == 1)
-        printf("\nTest 1 - verify players' drawn cards");
+    printf("\nTest 1 - verify cards are drawn from the player's deck to the player's hand\n");
+    printf("Testing with 5 cards in the deck\n");
 #endif
-    const int setDeckCount = 5;
-    
-    // set all player's cards in hand to 0 and decks to 3.
-    for(i=0; i<numPlayer; i++) {
-        G.handCount[i] = 0;
-        G.deckCount[i] = setDeckCount;
-
-        // all cards in decks will be smithy
-        for(int j=0; j<5; j++) {
-            G.deck[i][j] = smithy;
-        }
-    }
-    
-    int playerBeingTested = 0;
-    // test player 0
-    G.handCount[0] = 1;
-    G.hand[playerBeingTested][0] = council_room;
-    councilRoomCard(&G, playerBeingTested, 0); 
-
-    int testResults;
-    // test how many cards each player has
-    for(i=0; i<numPlayer; i++) {
+     
+    for(i=0; i<maxDeckCount; i++) {
+        int count = G.deckCount[p];
+        int hcount = G.handCount[p];
+        //printf("\nCount: %d\n", count);
+        drawCard(p, &G);
+        if(!assertion(G.deckCount[p] == count-1)) {
 #if (NOISY_TEST == 1)
-        printf("\nPlayer %d card on hand count is: %d\n", i, G.handCount[i]);
+            printf("\nERROR: deck did not decrement count!\n");
 #endif
-        if(i==playerBeingTested) {
-            testResults = assertion(G.handCount[playerBeingTested] == 4);
-
-            if(!testResults) {
-                printf("\nERROR: Player %d should have drawn 4 cards!\n", playerBeingTested);
-                testsPassed = 0;
-            }
-        } else {
-            testResults = assertion(G.handCount[i] == 1);
-
-            if(!testResults) {
-                printf("\nERROR: Player %d should have drawn 1 card!\n", i);
-                testsPassed = 0;
-            }
+            testsPassed = 0;
         }
+        if(!assertion(G.handCount[p] == hcount+1)) {
+#if (NOISY_TEST == 1)
+            printf("\nERROR: hand did not increment count!\n");
+#endif
+            testsPassed = 0;
+        }
+    }   
+
+#if (NOISY_TEST == 1)
+    printf("\nTest 2 - verify cards once deck is empty, discarded cards are shuffled into deck\n");
+    printf("5 cards are added to the discard pile\n");
+#endif
+    G.discardCount[p] = 4;
+
+    // add cards to discard pile
+    for(count=0; count<4; count++) {
+        G.discard[p][count] = copper; 
     }
 
-
-/***************************TEST 2*******************************/
-      /**Check if card was drawn from current player's deck.*/
+    int dcount = G.discardCount[p];
+    int hcount = G.handCount[p];
+    drawCard(p, &G);
+    if(!assertion(G.deckCount[p] > 0 && G.discardCount !=0)) {
 #if (NOISY_TEST == 1)
-        printf("\nTest 2 - verify if the user's deck was drawn from\n");
+        printf("\nERROR: discard pile did not get shuffled into deck!\n");
 #endif
-    testResults = assertion(G.deckCount[playerBeingTested] < setDeckCount );
-
-    if(!testResults) {
-        printf("\nERROR: Player %d's deck was not drawn from!\n", playerBeingTested);
         testsPassed = 0;
-    } 
+    }
+    if(!assertion(G.deckCount[p] == dcount-1)) {
+#if (NOISY_TEST == 1)
+        printf("\nERROR: discard pile did not decrement!\n");
+#endif
+        testsPassed = 0;
+    }
+    if(!assertion(G.handCount[p] == hcount+1)) {
+#if (NOISY_TEST == 1)
+        printf("\nERROR: hand did not increment count!\n");
+#endif
+        testsPassed = 0;
+    }
+    
 
     if(testsPassed) {
         printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
