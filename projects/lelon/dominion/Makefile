@@ -12,6 +12,9 @@ randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
 randomtestsmithy: randomtestsmithy.c dominion.o rngs.o
 	gcc -o randomtestsmithy -g  randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
 
+randomtesttreasuremap: randomtesttreasuremap.c dominion.o rngs.o
+	gcc -o randomtesttreasuremap -g  randomtesttreasuremap.c dominion.o rngs.o $(CFLAGS)
+
 playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
 #To run playdom you need to entere: ./playdom <any integer number> like ./playdom 10*/
@@ -42,6 +45,7 @@ all: playdom player
 
 randomtestadventurer: randomtestadventurer
 randomtestsmithy: randomtestsmithy
+randomtesttreasuremap: randomtesttreasuremap
 
 clean:
 	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer randomtestsmithy
