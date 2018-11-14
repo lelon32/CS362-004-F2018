@@ -53,7 +53,7 @@ int main() {
     }
 
 
-    printf ("\nStart Random TESTING adventurer card effects:\n\n");
+    printf ("\nStart random TESTING adventurer card effects:\n\n");
 
     // start of random testing 
     const int timesToTest = 100; 

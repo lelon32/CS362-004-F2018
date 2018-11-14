@@ -7,7 +7,10 @@ dominion.o: dominion.h dominion.c rngs.o
 	gcc -c dominion.c -g  $(CFLAGS)
 
 randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
-		gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
+	gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
+
+randomtestsmithy: randomtestsmithy.c dominion.o rngs.o
+	gcc -o randomtestsmithy -g  randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
 
 playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
@@ -38,6 +41,7 @@ player: player.c interface.o
 all: playdom player 
 
 randomtestadventurer: randomtestadventurer
+randomtestsmithy: randomtestsmithy
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer randomtestsmithy
