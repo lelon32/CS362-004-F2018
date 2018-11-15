@@ -5,12 +5,8 @@
  * Class: CS362
  * Instructor: Jaki Shaik
  * Assignment 4 
- * Description: Random testing program for the adventurer card. There are
- * n number of test runs. Each test run consists of either 1 or 2 treasure
- * map cards on the player's hand. The goal of the test is to verify 
- * consistent output with a large number of runs. 
- * Test 1 - Tests the effects of using the treasureMapCard function, 1 vs
- * 2 treasure maps.
+ * Description: 
+ * Test 1 - Tests the effects of using the treasureMapCard function.
  * NOTE: testUpdateCoins.c was used as a base template.
  *************************************************************************/
 
@@ -50,7 +46,7 @@ int main() {
 
     printf ("Start random TESTING Treasure Map card effects:\n");
 
-    const int NUM_TESTS = 100;
+    const int NUM_TESTS = 100000;
 
     for(int n=0; n<NUM_TESTS; n++) {
         memset(&G, 23, sizeof(struct gameState));   // clear the game state
@@ -83,15 +79,18 @@ int main() {
             }
 
             // count gold cards in deck
-            for(i=0; i<G.deckCount[playerBeingTested]; i++) {
-                if(G.deck[playerBeingTested][i] == gold) {
-                    ++goldCount;
-                }
-            }
+            //for(i=0; i<G.deckCount[playerBeingTested]; i++) {
+            //    if(G.deck[playerBeingTested][i] == gold) {
+            //        ++goldCount;
+            //    }
+            //}
 
+            printf("\n");
+        #if (NOISY_TEST == 1)
             for(i=0; i<G.handCount[playerBeingTested]; i++) {
                 printf("cards: %d ", i);
             }
+        #endif
 
             G.handCount[playerBeingTested]++;
             G.hand[playerBeingTested][0] = treasure_map;
@@ -161,7 +160,6 @@ int main() {
                 testsPassed = 0;
             }
         }
-        printf("\n");
     }
 
     if(testsPassed) {

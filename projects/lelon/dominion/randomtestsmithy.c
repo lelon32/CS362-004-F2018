@@ -49,7 +49,7 @@ int main() {
         cards[i] = adventurer;
     }
 
-    const int numTests = 100;
+    const int numTests = 100000;
 
     printf ("\nStart random TESTING smithy card effects:\n");
     for(int n=0; n<numTests; n++) {
@@ -57,13 +57,6 @@ int main() {
         initializeGame(numPlayer, k, seed, &G); // initialize a new game
         G.handCount[p] = handCount;                 // set the number of cards on hand
         memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
-
-        // For Test 3
-        int victoryCardPileCount = G.supplyCount[estate] + G.supplyCount[duchy] + G.supplyCount[province];
-        int kingdom[10];
-        for(i=0; i<10; i++) {
-            kingdom[i] = k[i];
-        }
         
         // Clear all treasure cards.
         int count;

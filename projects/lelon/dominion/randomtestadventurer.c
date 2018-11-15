@@ -47,16 +47,16 @@ int main() {
 
     int cards[MAX_HAND]; 
     
-    for (i = 0; i < handCount; i++)
-    {
-        cards[i] = adventurer;
-    }
+    //for (i = 0; i < handCount; i++)
+    //{
+    //    cards[i] = adventurer;
+    //}
 
 
     printf ("\nStart random TESTING adventurer card effects:\n\n");
 
     // start of random testing 
-    const int timesToTest = 100; 
+    const int timesToTest = 100000; 
 
     for(int i=0; i<timesToTest; i++) {
         memset(&G, 23, sizeof(struct gameState));   // clear the game state
@@ -105,12 +105,13 @@ int main() {
                 }
                 testsPassed = 0;
             } 
-        } else {
+        } 
+        //else {
             if(!assertion(treasureCount == 0)) {     // If no cards are drawn, there should be no treasure cards in deck
                 printf("\nERROR during TEST %d: there were no cards drawn but there are %d treasure cards in deck.\n", i+1, treasureCount);
                 testsPassed = 0;
             } 
-        }
+        //}
     }
    
 ///***************************TEST 1*******************************/
@@ -210,7 +211,7 @@ int main() {
 //    }
 //
     if(testsPassed) {
-        printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
+        // printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
     } else {
         printf("\nTEST FAILURES DETECTED\n");
     } 
