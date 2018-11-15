@@ -43,9 +43,34 @@ player: player.c interface.o
 
 all: playdom player 
 
+randomtestresults: randomtestadventurer.c randomtestsmithy.c randomtesttreasuremap.c dominion.c rngs.c
+
+	echo "Result for running adventurer random tests:" > randomtestadventurer.out
+
+	echo "randomtestadventurer.c:" >> randomtestadventurer.out
+	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
+	./randomtestadventurer >> randomtestadventurer.out
+	gcov randomtestadventurer.c -b >> randomtestadventurer.out
+
+	echo "Result for running smithy random tests:" > randomtestsmithy.out
+
+	echo "randomtestsmithy.c:" >> randomtestsmithy.out
+	gcc -o randomtestsmithy -g randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
+	./randomtestsmithy >> randomtestsmithy.out
+	gcov randomtestsmithy.c -b >> randomtestsmithy.out
+
+	echo "Result for running treasuremap random tests:" > randomtesttreasuremap.out
+
+	echo "randomtesttreasuremap.c:" >> randomtesttreasuremap.out
+	gcc -o randomtesttreasuremap -g randomtesttreasuremap.c dominion.o rngs.o $(CFLAGS)
+	./randomtesttreasuremap >> randomtesttreasuremap.out
+	gcov randomtesttreasuremap.c -b >> randomtesttreasuremap.out
+
+randomtestresults: randomtestresults
+
 randomtestadventurer: randomtestadventurer
 randomtestsmithy: randomtestsmithy
 randomtesttreasuremap: randomtesttreasuremap
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer randomtestsmithy
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer randomtestsmithy randomtesttreasuremap
