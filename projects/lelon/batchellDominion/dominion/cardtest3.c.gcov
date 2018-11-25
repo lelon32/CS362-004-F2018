@@ -1,0 +1,237 @@
+        -:    0:Source:cardtest3.c
+        -:    0:Graph:cardtest3.gcno
+        -:    0:Data:cardtest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************************* 
+        -:    2: * Program: cardtest3 
+        -:    3: * Author: Long Le
+        -:    4: * Date: 27-Oct-2018 
+        -:    5: * Class: CS362
+        -:    6: * Instructor: Jaki Shaik
+        -:    7: * Assignment 3 
+        -:    8: * Description: Test program for treasure map card.
+        -:    9: * Test 1 - Tests the effects of using the treasureMapCard function.
+        -:   10: * NOTE: testUpdateCoins.c was used as a base template.
+        -:   11: *************************************************************************/
+        -:   12:
+        -:   13:#include "dominion.h"
+        -:   14:#include "dominion_helpers.h"
+        -:   15:#include <string.h>
+        -:   16:#include <stdio.h>
+        -:   17:#include "rngs.h"
+        -:   18:
+        -:   19:int assertion(int a); 
+        -:   20:
+        -:   21:// set NOISY_TEST to 0 to remove printfs from output
+        -:   22:#define NOISY_TEST 1
+        -:   23:
+function main called 1 returned 100% blocks executed 81%
+        1:   24:int main() {
+        1:   25:    int testsPassed=1;
+        -:   26:    int i;
+        1:   27:    int seed = 1000;
+        1:   28:    int numPlayer = 2;
+        -:   29:    //int maxBonus = 10;
+        1:   30:    int p=0, handCount=0;
+        1:   31:    int k[10] = {adventurer, council_room, feast, gardens, mine
+        -:   32:               , remodel, smithy, village, baron, great_hall};
+        -:   33:    struct gameState G;
+        -:   34:    //int maxHandCount = 5;
+        1:   35:    int maxDeckCount = 5;
+        -:   36:
+        -:   37:    int cards[MAX_HAND]; 
+        -:   38:    
+       1*:   39:    for (i = 0; i < handCount; i++)
+branch  0 taken 0%
+branch  1 taken 100% (fallthrough)
+        -:   40:    {
+    #####:   41:        cards[i] = adventurer;
+        -:   42:    }
+        -:   43:
+        1:   44:    printf ("TESTING Treasure Map card effects:\n");
+call    0 returned 100%
+        1:   45:    memset(&G, 23, sizeof(struct gameState));   // clear the game state
+        1:   46:    initializeGame(numPlayer, k, seed, &G); // initialize a new game
+call    0 returned 100%
+        -:   47://    G.handCount[p] = handCount;                 // set the number of cards on hand
+        -:   48://    memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
+        -:   49:    
+        -:   50:/***************************TEST 1*******************************/
+        -:   51:      /**Check how many cards were drawn by player*/
+        -:   52:
+        -:   53:#if (NOISY_TEST == 1)
+        1:   54:        printf("\nTest 1a - only 1 treasure map in player's hand\n");
+call    0 returned 100%
+        -:   55:#endif
+        1:   56:    int playerBeingTested = 0;
+        1:   57:    int goldCount = 0;;
+        -:   58:    
+        1:   59:    const int setDeckCount = 5;
+        -:   60:    
+        -:   61:    // set all player's cards in hand to 0 and decks.
+        3:   62:    for(i=0; i<numPlayer; i++) {
+branch  0 taken 67%
+branch  1 taken 33% (fallthrough)
+        2:   63:        G.handCount[i] = 0;
+        2:   64:        G.deckCount[i] = setDeckCount;
+        -:   65:
+        -:   66:        // all cards in decks will be smithy
+       12:   67:        for(int j=0; j<setDeckCount; j++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+       10:   68:            G.deck[i][j] = smithy;
+        -:   69:        }
+        -:   70:    }
+        -:   71:
+        -:   72:    // count gold cards in deck
+        6:   73:    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        5:   74:        if(G.deck[playerBeingTested][i] == gold) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   75:            ++goldCount;
+        -:   76:        }
+        -:   77:    }
+        -:   78:
+        1:   79:    printf("\n");
+call    0 returned 100%
+       1*:   80:    for(i=0; i<G.handCount[playerBeingTested]; i++) {
+branch  0 taken 0%
+branch  1 taken 100% (fallthrough)
+    #####:   81:        printf("cards: %d ", i);
+call    0 never executed
+        -:   82:    }
+        -:   83:
+        1:   84:    G.handCount[playerBeingTested]++;
+        1:   85:    G.hand[playerBeingTested][0] = treasure_map;
+        -:   86:
+        1:   87:    int goldCount2nd = 0;
+        -:   88:
+        -:   89:    //treasureMapCard(&G, playerBeingTested, 0);
+        1:   90:    cardEffect(treasure_map, 0, 0, 0, &G, 0, 0);
+call    0 returned 100%
+        -:   91:    
+        -:   92:    // count gold cards in deck
+        6:   93:    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        5:   94:        if(G.deck[playerBeingTested][i] == gold) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   95:            ++goldCount2nd;
+        -:   96:        }
+        -:   97:    }
+        -:   98:
+        1:   99:    int testResults = assertion(goldCount == goldCount2nd); 
+call    0 returned 100%
+        -:  100:
+        1:  101:    if(!testResults) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  102:        printf("\nERROR: original gold count is %d and current gold count is %d\n", goldCount, goldCount2nd);
+call    0 never executed
+    #####:  103:        printf("ERROR: NO GOLD SHOULD BE ADDED TO DECK\n");
+call    0 never executed
+    #####:  104:        testsPassed = 0;
+        -:  105:    }
+        -:  106:
+        -:  107:
+        -:  108:    // Test with 2 treasure map cards
+        -:  109:#if (NOISY_TEST == 1)
+        1:  110:        printf("\nTest 1b - 2 treasure map cards in player's hand\n");
+call    0 returned 100%
+        -:  111:#endif
+        1:  112:    G.handCount[playerBeingTested] = 0;
+        1:  113:    G.deckCount[playerBeingTested] = setDeckCount;
+        -:  114:
+        -:  115:    // all cards in decks will be smithy
+        6:  116:    for(int j=0; j<setDeckCount; j++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        5:  117:        G.deck[playerBeingTested][j] = smithy;
+        -:  118:    }
+        -:  119:
+        -:  120:    // count gold cards in deck
+        6:  121:    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        5:  122:        if(G.deck[playerBeingTested][i] == gold) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  123:            ++goldCount;
+        -:  124:        }
+        -:  125:    }
+        -:  126:
+        -:  127:    // add 2 treasure maps card to hand 
+        1:  128:    G.deck[playerBeingTested][0] = treasure_map;
+        1:  129:    G.deck[playerBeingTested][1] = treasure_map;
+        1:  130:    G.handCount[playerBeingTested] += 2;
+        -:  131:
+        1:  132:    goldCount2nd = 0;
+        -:  133:
+        -:  134:    //treasureMapCard(&G, playerBeingTested, 0);
+        -:  135:    
+        1:  136:    cardEffect(treasure_map, 0, 0, 0, &G, 0, 0);
+call    0 returned 100%
+        -:  137:
+        -:  138:    // count gold cards in deck
+        6:  139:    for(i=0; i<G.deckCount[playerBeingTested]; i++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+        5:  140:        if(G.deck[playerBeingTested][i] == gold) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  141:            ++goldCount2nd;
+        -:  142:        }
+        -:  143:    }
+        -:  144:
+        1:  145:    testResults = assertion(goldCount2nd == goldCount+4); 
+call    0 returned 100%
+        -:  146:
+        1:  147:    if(!testResults) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        1:  148:        printf("\nERROR: original gold count is %d and current gold count is %d\n", goldCount, goldCount2nd);
+call    0 returned 100%
+        1:  149:        printf("ERROR: 4 gold cards should be received into deck\n");
+call    0 returned 100%
+        1:  150:        testsPassed = 0;
+        -:  151:    }
+        -:  152:
+        -:  153:
+        1:  154:    if(testsPassed) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  155:        printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
+call    0 never executed
+        -:  156:    } else {
+        1:  157:        printf("\nTEST FAILURES DETECTED\n");
+call    0 returned 100%
+        -:  158:    } 
+        -:  159:
+        1:  160:    return 0;
+        -:  161:}
+        -:  162:
+        -:  163:/************************************************************************* 
+        -:  164: * Description: Custom assertion function to be able to use with coverage
+        -:  165: * programs (does not stop program).
+        -:  166: * @param a - test conditional statement; false == 0, true >= 1.
+        -:  167: *************************************************************************/
+function assertion called 2 returned 100% blocks executed 100%
+        2:  168:int assertion(int a) {
+        2:  169:    if(a<=0) {
+branch  0 taken 50% (fallthrough)
+branch  1 taken 50%
+        1:  170:        printf("TEST FAILED! ");    
+call    0 returned 100%
+        1:  171:        return 0;
+        -:  172:    }
+        -:  173:
+        -:  174:#if (NOISY_TEST == 1)
+        1:  175:    printf("TEST PASSED\n");    
+call    0 returned 100%
+        -:  176:#endif
+        1:  177:    return 1;
+        -:  178:}

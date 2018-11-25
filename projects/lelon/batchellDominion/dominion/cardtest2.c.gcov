@@ -1,0 +1,244 @@
+        -:    0:Source:cardtest2.c
+        -:    0:Graph:cardtest2.gcno
+        -:    0:Data:cardtest2.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************************* 
+        -:    2: * Program: cardtest2
+        -:    3: * Author: Long Le
+        -:    4: * Date: 27-Oct-2018 
+        -:    5: * Class: CS362
+        -:    6: * Instructor: Jaki Shaik
+        -:    7: * Assignment 3 
+        -:    8: * Description: Unit test program for smithy card effects.
+        -:    9: * 1. Tests how many cards were drawn by each player. 
+        -:   10: * 2. Check if cards were drawn from the user's deck. 
+        -:   11: * 3. Check if the state of victory and kingdom cards have changed.
+        -:   12: * NOTE: testUpdateCoins.c was used as a base template.
+        -:   13: *************************************************************************/
+        -:   14:
+        -:   15:#include "dominion.h"
+        -:   16:#include "dominion_helpers.h"
+        -:   17:#include <string.h>
+        -:   18:#include <stdio.h>
+        -:   19:#include "rngs.h"
+        -:   20:
+        -:   21:int assertion(int a); 
+        -:   22:
+        -:   23:// set NOISY_TEST to 0 to remove printfs from output
+        -:   24:#define NOISY_TEST 1
+        -:   25:
+function main called 1 returned 100% blocks executed 81%
+        1:   26:int main() {
+        1:   27:    int testsPassed=1;
+        -:   28:    int i;
+        1:   29:    int seed = 1000;
+        1:   30:    int numPlayer = 2;
+        -:   31:    //int maxBonus = 10;
+        1:   32:    int p=0, handCount=0;
+        1:   33:    int k[10] = {adventurer, council_room, feast, gardens, mine
+        -:   34:               , remodel, smithy, village, baron, great_hall};
+        -:   35:    struct gameState G;
+        -:   36:    //int maxHandCount = 5;
+        1:   37:    int maxDeckCount = 4;
+        -:   38:
+        -:   39:    int cards[MAX_HAND]; 
+        -:   40:    
+       1*:   41:    for (i = 0; i < handCount; i++)
+branch  0 taken 0%
+branch  1 taken 100% (fallthrough)
+        -:   42:    {
+    #####:   43:        cards[i] = adventurer;
+        -:   44:    }
+        -:   45:
+        1:   46:    printf ("TESTING smithy card effects:\n");
+call    0 returned 100%
+        1:   47:    memset(&G, 23, sizeof(struct gameState));   // clear the game state
+        1:   48:    initializeGame(numPlayer, k, seed, &G); // initialize a new game
+call    0 returned 100%
+        1:   49:    G.handCount[p] = handCount;                 // set the number of cards on hand
+        1:   50:    memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
+        -:   51:
+        -:   52:    // For Test 3
+        1:   53:    int victoryCardPileCount = G.supplyCount[estate] + G.supplyCount[duchy] + G.supplyCount[province];
+        -:   54:    int kingdom[10];
+       11:   55:    for(i=0; i<10; i++) {
+branch  0 taken 91%
+branch  1 taken 9% (fallthrough)
+       10:   56:        kingdom[i] = k[i];
+        -:   57:    }
+        -:   58:    
+        -:   59:    // Clear all treasure cards.
+        -:   60:    int count;
+        5:   61:    for(count=0; count<maxDeckCount; count++) {
+branch  0 taken 80%
+branch  1 taken 20% (fallthrough)
+        4:   62:        G.deck[p][count] = adventurer; 
+        -:   63:    }
+        -:   64:
+        1:   65:    G.deckCount[p] = maxDeckCount; // reset
+        -:   66:   
+        -:   67:/***************************TEST 1*******************************/
+        -:   68:      /**Check how many cards were drawn by each player*/
+        -:   69:
+        -:   70:#if (NOISY_TEST == 1)
+        1:   71:        printf("\nTest 1 - verify players' drawn cards");
+call    0 returned 100%
+        -:   72:#endif
+        1:   73:    const int setDeckCount = 5;
+        -:   74:    
+        -:   75:    // set all player's cards in hand to 0 and decks to 3.
+        3:   76:    for(i=0; i<numPlayer; i++) {
+branch  0 taken 67%
+branch  1 taken 33% (fallthrough)
+        2:   77:        G.handCount[i] = 0;
+        2:   78:        G.deckCount[i] = setDeckCount;
+        -:   79:
+        -:   80:        // all cards in decks will be smithy
+       12:   81:        for(int j=0; j<5; j++) {
+branch  0 taken 83%
+branch  1 taken 17% (fallthrough)
+       10:   82:            G.deck[i][j] = smithy;
+        -:   83:        }
+        -:   84:    }
+        -:   85:    
+        1:   86:    int playerBeingTested = 0;
+        -:   87:    // test player 0
+        1:   88:    G.handCount[0] = 1;
+        1:   89:    G.hand[playerBeingTested][0] = smithy;
+        1:   90:    cardEffect(smithy, 0, 0, 0, &G, 0, 0);
+call    0 returned 100%
+        -:   91:
+        -:   92:    int testResults;
+        -:   93:    // test how many cards each player has
+        3:   94:    for(i=0; i<numPlayer; i++) {
+branch  0 taken 67%
+branch  1 taken 33% (fallthrough)
+        -:   95:#if (NOISY_TEST == 1)
+        2:   96:        printf("\nPlayer %d card on hand count is: %d\n", i, G.handCount[i]);
+call    0 returned 100%
+        -:   97:#endif
+        2:   98:        if(i==playerBeingTested) {
+branch  0 taken 50% (fallthrough)
+branch  1 taken 50%
+        1:   99:            testResults = assertion(G.handCount[playerBeingTested] == 3);
+call    0 returned 100%
+        -:  100:
+        1:  101:            if(!testResults) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  102:                printf("\nERROR: Player %d should have drawn 3 cards!\n", playerBeingTested);
+call    0 never executed
+    #####:  103:                testsPassed = 0;
+        -:  104:            }
+        -:  105:        } else {
+        1:  106:            testResults = assertion(G.handCount[i] == 0);
+call    0 returned 100%
+        -:  107:
+        1:  108:            if(!testResults) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  109:                printf("\nERROR: Player %d should have drawn 0 cards!\n", i);
+call    0 never executed
+    #####:  110:                testsPassed = 0;
+        -:  111:            }
+        -:  112:        }
+        -:  113:    }
+        1:  114:    printf("\n");
+call    0 returned 100%
+        -:  115:
+        -:  116:
+        -:  117:/***************************TEST 2*******************************/
+        -:  118:      /**Check if card was drawn from current player's deck.*/
+        -:  119:#if (NOISY_TEST == 1)
+        1:  120:        printf("\nTest 2 - verify if the user's deck was drawn from\n");
+call    0 returned 100%
+        -:  121:#endif
+        1:  122:    testResults = assertion(G.deckCount[playerBeingTested] < setDeckCount );
+call    0 returned 100%
+        -:  123:
+        1:  124:    if(!testResults) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  125:        printf("\nERROR: Player %d's deck was not drawn from!\n", playerBeingTested);
+call    0 never executed
+    #####:  126:        testsPassed = 0;
+        -:  127:    } 
+        -:  128:
+        -:  129:
+        -:  130:/***************************TEST 3*******************************/
+        -:  131:      /**Check if victory card piles or kingdom card piles changed.*/
+        -:  132:#if (NOISY_TEST == 1)
+        1:  133:        printf("\nTest 3 - verify if the victory card or kingdom card piles were not changed\n");
+call    0 returned 100%
+        1:  134:        printf("\nTesting count of victory cards.\n");
+call    0 returned 100%
+        -:  135:#endif
+        -:  136:
+        -:  137:    // Test count of victory cards
+        1:  138:    int newVictoryCardCount = G.supplyCount[estate] + G.supplyCount[duchy] + G.supplyCount[province];
+        1:  139:    testResults = assertion(victoryCardPileCount == newVictoryCardCount); 
+call    0 returned 100%
+        -:  140:
+        1:  141:    if(!testResults) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  142:        printf("\nERROR: Count of victory cards changed from %d to %d!\n", victoryCardPileCount, newVictoryCardCount);
+call    0 never executed
+    #####:  143:        testsPassed = 0;
+        -:  144:    }
+        -:  145:
+        -:  146:    // Test state of kingdom cards
+       11:  147:    for(i=0; i<10; i++) {
+branch  0 taken 91%
+branch  1 taken 9% (fallthrough)
+        -:  148:#if (NOISY_TEST == 1)
+       10:  149:        printf("\nTesting kingdom card #%d\n", i);
+call    0 returned 100%
+        -:  150:#endif
+       10:  151:        testResults = assertion(kingdom[i] == k[i]);
+call    0 returned 100%
+       10:  152:        if(!testResults){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  153:            testsPassed = 0;
+    #####:  154:            printf("\nERROR: card #%d is %d but was originally %d!\n", i, k[i], kingdom[i]);
+call    0 never executed
+        -:  155:        }
+        -:  156:    }
+        -:  157:
+        -:  158:
+        1:  159:    if(testsPassed) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        1:  160:        printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
+call    0 returned 100%
+        -:  161:    } else {
+    #####:  162:        printf("\nTEST FAILURES DETECTED\n");
+call    0 never executed
+        -:  163:    } 
+        -:  164:
+        1:  165:    return 0;
+        -:  166:}
+        -:  167:
+        -:  168:/************************************************************************* 
+        -:  169: * Description: Custom assertion function to be able to use with coverage
+        -:  170: * programs (does not stop program).
+        -:  171: * @param a - test conditional statement; false == 0, true >= 1.
+        -:  172: *************************************************************************/
+function assertion called 14 returned 100% blocks executed 67%
+       14:  173:int assertion(int a) {
+       14:  174:    if(a<=0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  175:        printf("TEST FAILED! ");    
+call    0 never executed
+    #####:  176:        return 0;
+        -:  177:    }
+        -:  178:
+        -:  179:#if (NOISY_TEST == 1)
+       14:  180:    printf("TEST PASSED\n");    
+call    0 returned 100%
+        -:  181:#endif
+       14:  182:    return 1;
+        -:  183:}

@@ -1,0 +1,239 @@
+        -:    0:Source:cardtest1.c
+        -:    0:Graph:cardtest1.gcno
+        -:    0:Data:-
+        -:    0:Runs:0
+        -:    0:Programs:0
+        -:    1:/************************************************************************* 
+        -:    2: * Program: cardtest1 
+        -:    3: * Author: Long Le
+        -:    4: * Date: 24-Oct-2018 
+        -:    5: * Class: CS362
+        -:    6: * Instructor: Jaki Shaik
+        -:    7: * Assignment 3 
+        -:    8: * Description: Unit test program for function adventurer card effects.
+        -:    9: * **Works with both cardEffect or if there's a function call within
+        -:   10: * cardEffect.
+        -:   11: * 1. Tests how many treasure cards can be drawn.
+        -:   12: * 2. Tests if other cards count as treasure cards.
+        -:   13: * NOTE: testUpdateCoins.c was used as a base template.
+        -:   14: *************************************************************************/
+        -:   15:
+        -:   16:#include "dominion.h"
+        -:   17:#include "dominion_helpers.h"
+        -:   18:#include <string.h>
+        -:   19:#include <stdio.h>
+        -:   20:#include "rngs.h"
+        -:   21:
+        -:   22:int assertion(int a); 
+        -:   23:
+        -:   24:// set NOISY_TEST to 0 to remove printfs from output
+        -:   25:#define NOISY_TEST 1
+        -:   26:
+function main called 0 returned 0% blocks executed 0%
+    #####:   27:int main() {
+    #####:   28:    int testsPassed=0;
+        -:   29:    int i;
+    #####:   30:    int seed = 1000;
+    #####:   31:    int numPlayer = 2;
+        -:   32:    //int maxBonus = 10;
+    #####:   33:    int p=0, handCount=0;
+    #####:   34:    int k[10] = {adventurer, council_room, feast, gardens, mine
+        -:   35:               , remodel, smithy, village, baron, great_hall};
+        -:   36:    struct gameState G;
+        -:   37:    //int maxHandCount = 5;
+    #####:   38:    int maxDeckCount = 4;
+        -:   39:
+        -:   40:    int cards[MAX_HAND]; 
+        -:   41:    
+    #####:   42:    for (i = 0; i < handCount; i++)
+branch  0 never executed
+branch  1 never executed
+        -:   43:    {
+    #####:   44:        cards[i] = adventurer;
+        -:   45:    }
+        -:   46:
+    #####:   47:    printf ("TESTING adventurer card effects:\n\n");
+call    0 never executed
+    #####:   48:    memset(&G, 23, sizeof(struct gameState));   // clear the game state
+    #####:   49:    initializeGame(numPlayer, k, seed, &G); // initialize a new game
+call    0 never executed
+    #####:   50:    G.handCount[p] = handCount;                 // set the number of cards on hand
+    #####:   51:    memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
+        -:   52:
+        -:   53:    
+        -:   54:    // Clear all treasure cards.
+        -:   55:    int count;
+    #####:   56:    for(count=0; count<maxDeckCount; count++) {
+branch  0 never executed
+branch  1 never executed
+    #####:   57:        G.deck[p][count] = adventurer; 
+        -:   58:    }
+        -:   59:
+    #####:   60:    G.deckCount[p] = maxDeckCount; // reset
+        -:   61:   
+        -:   62:/***************************TEST 1*******************************/
+        -:   63:         /**Check how many treasure cards are added*/
+        -:   64:
+        -:   65:    // Put 1 treasure cards in deck
+    #####:   66:    G.deck[p][0] = copper;
+        -:   67:#if (NOISY_TEST == 1)
+    #####:   68:    printf("Test 1 - check how many treasure cards are added.\n\n");
+call    0 never executed
+        -:   69:#endif
+        -:   70:
+        -:   71:#if (NOISY_TEST == 1)
+    #####:   72:    printf("Testing with 1 treasure card in deck.\nOnly 1 card should be added to hand.\n");
+call    0 never executed
+        -:   73:#endif
+    #####:   74:    int origCardsInHand = G.handCount[p];
+        -:   75:
+    #####:   76:    cardEffect(adventurer, 0, 0, 0, &G, 0, 0);
+call    0 never executed
+        -:   77:
+        -:   78:#if (NOISY_TEST == 1)
+    #####:   79:    testsPassed = assertion(G.handCount[p]==origCardsInHand+1);
+call    0 never executed
+    #####:   80:    if(!testsPassed) {
+branch  0 never executed
+branch  1 never executed
+    #####:   81:        printf("%d card(s) were added.\n", G.handCount[p]-origCardsInHand);
+call    0 never executed
+        -:   82:    }
+        -:   83:#endif
+        -:   84:
+    #####:   85:    origCardsInHand = G.handCount[p];
+    #####:   86:    G.deckCount[p] = maxDeckCount; // reset
+        -:   87:
+        -:   88:#if (NOISY_TEST == 1)
+    #####:   89:    printf("Testing with 2 treasure cards in deck.\n2 cards should be added to hand.\n");
+call    0 never executed
+        -:   90:#endif
+        -:   91:    // Put 2 treasure cards in deck
+    #####:   92:    G.deck[p][0] = copper; 
+    #####:   93:    G.deck[p][1] = silver; 
+    #####:   94:    cardEffect(adventurer, 0, 0, 0, &G, 0, 0);
+call    0 never executed
+        -:   95:
+        -:   96:#if (NOISY_TEST == 1)
+    #####:   97:    testsPassed = assertion(G.handCount[p]==origCardsInHand+2);
+call    0 never executed
+    #####:   98:    if(!testsPassed) {
+branch  0 never executed
+branch  1 never executed
+    #####:   99:        printf("%d card(s) were added.\n", G.handCount[p]-origCardsInHand);
+call    0 never executed
+        -:  100:    }
+        -:  101:#endif
+        -:  102:
+    #####:  103:    origCardsInHand = G.handCount[p];
+    #####:  104:    G.deckCount[p] = maxDeckCount; // reset
+        -:  105:
+        -:  106:#if (NOISY_TEST == 1)
+    #####:  107:    printf("Testing with 3 treasure cards in deck.\nOnly 2 cards should be added to hand.\n");
+call    0 never executed
+        -:  108:#endif
+        -:  109:    // Put 3 treasure cards in deck
+    #####:  110:    G.deck[p][0] = copper; 
+    #####:  111:    G.deck[p][1] = silver;
+    #####:  112:    G.deck[p][2] = gold; 
+    #####:  113:    cardEffect(adventurer, 0, 0, 0, &G, 0, 0);
+call    0 never executed
+        -:  114:
+        -:  115:#if (NOISY_TEST == 1)
+    #####:  116:    testsPassed = assertion(G.handCount[p]==origCardsInHand+2);
+call    0 never executed
+    #####:  117:    if(!testsPassed) {
+branch  0 never executed
+branch  1 never executed
+    #####:  118:        printf("%d card(s) were added.\n", G.handCount[p]-origCardsInHand);
+call    0 never executed
+        -:  119:    }
+        -:  120:#endif
+        -:  121:
+        -:  122:/***************************TEST 2*******************************/
+        -:  123:/**Check if cards other than treasure cards are counted as treasure cards*/
+        -:  124:#if (NOISY_TEST == 1)
+    #####:  125:    printf("\nTest 3 - check if other cards are counted as a treasure card.\n\n");
+call    0 never executed
+        -:  126:#endif
+    #####:  127:    int maxCardTypes = 27;
+    #####:  128:    int passing = 1;
+        -:  129:    int j;
+    #####:  130:    G.deckCount[p] = maxDeckCount;
+        -:  131:
+        -:  132:
+        -:  133:    // Check every card in the game.
+    #####:  134:    for(i=0; i<maxCardTypes && passing == 1; i++) {
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+        -:  135:        // reset
+    #####:  136:        G.handCount[p] = 0;
+    #####:  137:        G.deckCount[p] = maxDeckCount;
+        -:  138:
+        -:  139:#if (NOISY_TEST == 1)
+    #####:  140:        printf("\nChecking card %d\n", i);
+call    0 never executed
+        -:  141:#endif
+    #####:  142:        if(i < 4 || i > 6) { // only test on non-treasure cards.
+branch  0 never executed
+branch  1 never executed
+branch  2 never executed
+branch  3 never executed
+    #####:  143:            for(j=0; j<maxDeckCount; j++) {
+branch  0 never executed
+branch  1 never executed
+    #####:  144:                G.deck[p][0] = i;    
+        -:  145:            }
+        -:  146:
+    #####:  147:            cardEffect(adventurer, 0, 0, 0, &G, 0, 0);
+call    0 never executed
+    #####:  148:            passing = assertion(G.handCount[p]>1);
+call    0 never executed
+        -:  149:
+    #####:  150:            if(!passing) {
+branch  0 never executed
+branch  1 never executed
+    #####:  151:                printf("ERROR: Card %d counted as a treasure card!\n", i);
+call    0 never executed
+    #####:  152:                testsPassed = 0;
+        -:  153:            }
+        -:  154:
+        -:  155:        }
+        -:  156:    }
+        -:  157:
+    #####:  158:    if(testsPassed) {
+branch  0 never executed
+branch  1 never executed
+    #####:  159:        printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
+call    0 never executed
+        -:  160:    } else {
+    #####:  161:        printf("\nTEST FAILURES DETECTED\n");
+call    0 never executed
+        -:  162:    } 
+        -:  163:
+    #####:  164:    return 0;
+        -:  165:}
+        -:  166:
+        -:  167:/************************************************************************* 
+        -:  168: * Description: Custom assertion function to be able to use with coverage
+        -:  169: * programs (does not stop program).
+        -:  170: * @param a - test conditional statement; false == 0, true >= 1.
+        -:  171: *************************************************************************/
+function assertion called 0 returned 0% blocks executed 0%
+    #####:  172:int assertion(int a) {
+    #####:  173:    if(a<=0) {
+branch  0 never executed
+branch  1 never executed
+    #####:  174:        printf("TEST FAILED! ");    
+call    0 never executed
+    #####:  175:        return 0;
+        -:  176:    }
+        -:  177:
+        -:  178:#if (NOISY_TEST == 1)
+    #####:  179:    printf("TEST PASSED\n\n");    
+call    0 never executed
+        -:  180:#endif
+    #####:  181:    return 1;
+        -:  182:}

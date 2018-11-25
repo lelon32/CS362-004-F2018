@@ -1,0 +1,143 @@
+        -:    0:Source:unittest3.c
+        -:    0:Graph:unittest3.gcno
+        -:    0:Data:unittest3.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************************* 
+        -:    2: * Program: unittest3
+        -:    3: * Author: Long Le
+        -:    4: * Date: 28-Oct-2018 
+        -:    5: * Class: CS362
+        -:    6: * Instructor: Jaki Shaik
+        -:    7: * Assignment 3 
+        -:    8: * Description: Unit test program for function isGameOver().
+        -:    9: * NOTE: testUpdateCoins.c was used as a base template.
+        -:   10: *************************************************************************/
+        -:   11:
+        -:   12:#include "dominion.h"
+        -:   13:#include "dominion_helpers.h"
+        -:   14:#include <string.h>
+        -:   15:#include <stdio.h>
+        -:   16:#include "rngs.h"
+        -:   17:
+        -:   18:int assertion(int a); 
+        -:   19:
+        -:   20:// set NOISY_TEST to 0 to remove printfs from output
+        -:   21:#define NOISY_TEST 1
+        -:   22:
+function main called 1 returned 100% blocks executed 71%
+        1:   23:int main() {
+        1:   24:    int testsPassed=1;
+        -:   25:    int i;
+        1:   26:    int seed = 1000;
+        1:   27:    int numPlayer = 2;
+        -:   28:    //int maxBonus = 10;
+        1:   29:    int p=0, handCount=0;
+        1:   30:    int k[10] = {adventurer, council_room, feast, gardens, mine
+        -:   31:               , remodel, smithy, village, baron, great_hall};
+        -:   32:    struct gameState G;
+        -:   33:    //int maxHandCount = 5;
+        1:   34:    int maxDeckCount = 5;
+        -:   35:
+        -:   36:    int cards[MAX_HAND]; 
+        -:   37:    
+       1*:   38:    for (i = 0; i < handCount; i++)
+branch  0 taken 0%
+branch  1 taken 100% (fallthrough)
+        -:   39:    {
+    #####:   40:        cards[i] = adventurer;
+        -:   41:    }
+        -:   42:
+        1:   43:    printf ("TESTING isGameOver():\n");
+call    0 returned 100%
+        1:   44:    memset(&G, 23, sizeof(struct gameState));   // clear the game state
+        1:   45:    initializeGame(numPlayer, k, seed, &G); // initialize a new game
+call    0 returned 100%
+        -:   46://    G.handCount[p] = handCount;                 // set the number of cards on hand
+        -:   47://    memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
+        -:   48:    
+        -:   49:/***************************TEST 1*******************************/
+        -:   50:      /**Check how many cards were drawn by player*/
+        -:   51:
+        -:   52:#if (NOISY_TEST == 1)
+        1:   53:    printf("\nTest 1 - verify the game ends if there are no more province cards\n");
+call    0 returned 100%
+        -:   54:#endif
+        1:   55:    G.supplyCount[province] = 0;
+        1:   56:    if(!assertion(isGameOver(&G))) {
+call    0 returned 100%
+call    1 returned 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    #####:   57:        printf("\nERROR: Failed to end game when province cards = 0\n");    
+call    0 never executed
+    #####:   58:        testsPassed = 0;
+        -:   59:    }
+        -:   60:
+        1:   61:    G.supplyCount[province] = 1;
+        1:   62:    G.supplyCount[0] = 0;
+        1:   63:    G.supplyCount[1] = 0;
+        1:   64:    G.supplyCount[2] = 0;
+        -:   65:#if (NOISY_TEST == 1)
+        1:   66:    printf("\nTest 2 - verify the game ends if there are 3 empty supply piles\n");
+call    0 returned 100%
+        -:   67:#endif
+        1:   68:    if(!assertion(isGameOver(&G))) {
+call    0 returned 100%
+call    1 returned 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    #####:   69:        printf("\nERROR: Failed to end game when 3 supply piles are empty!\n");    
+call    0 never executed
+    #####:   70:        testsPassed = 0;
+        -:   71:    }
+        -:   72:
+        1:   73:    G.supplyCount[2] = 1;
+        -:   74:#if (NOISY_TEST == 1)
+        1:   75:    printf("\nTest 3 - verify the game continues if there are province cards\n and if there are less than 3 supply piles empty. \n");
+call    0 returned 100%
+        -:   76:#endif
+        1:   77:    if(!assertion(!isGameOver(&G))) {
+call    0 returned 100%
+call    1 returned 100%
+branch  2 taken 0% (fallthrough)
+branch  3 taken 100%
+    #####:   78:        printf("\nERROR: Game ended when it was not supposed to!\n");    
+call    0 never executed
+    #####:   79:        testsPassed = 0;
+        -:   80:    }
+        -:   81:
+        1:   82:    if(testsPassed) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        1:   83:        printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
+call    0 returned 100%
+        -:   84:    } else {
+    #####:   85:        printf("\nTEST FAILURES DETECTED\n");
+call    0 never executed
+        -:   86:    } 
+        -:   87:
+        1:   88:    return 0;
+        -:   89:}
+        -:   90:
+        -:   91:/************************************************************************* 
+        -:   92: * Description: Custom assertion function to be able to use with coverage
+        -:   93: * programs (does not stop program).
+        -:   94: * @param a - test conditional statement; false == 0, true >= 1.
+        -:   95: *************************************************************************/
+function assertion called 3 returned 100% blocks executed 67%
+        3:   96:int assertion(int a) {
+        3:   97:    if(a<=0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   98:        printf("TEST FAILED! ");    
+call    0 never executed
+    #####:   99:        return 0;
+        -:  100:    }
+        -:  101:
+        -:  102:#if (NOISY_TEST == 1)
+        3:  103:    printf("TEST PASSED\n");    
+call    0 returned 100%
+        -:  104:#endif
+        3:  105:    return 1;
+        -:  106:}

@@ -1,0 +1,202 @@
+        -:    0:Source:unittest1.c
+        -:    0:Graph:unittest1.gcno
+        -:    0:Data:unittest1.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************************* 
+        -:    2: * Program: unittest1 
+        -:    3: * Author: Long Le
+        -:    4: * Date: 28-Oct-2018 
+        -:    5: * Class: CS362
+        -:    6: * Instructor: Jaki Shaik
+        -:    7: * Assignment 3 
+        -:    8: * Description: Unit test program for function fullDeckCount().
+        -:    9: * 1. Test initial count
+        -:   10: * 2. Test by drawing two cards
+        -:   11: * 3. Test by adding 2 cards to discard pile
+        -:   12: * NOTE: testUpdateCoins.c was used as a base template.
+        -:   13: *************************************************************************/
+        -:   14:
+        -:   15:#include "dominion.h"
+        -:   16:#include "dominion_helpers.h"
+        -:   17:#include <string.h>
+        -:   18:#include <stdio.h>
+        -:   19:#include "rngs.h"
+        -:   20:
+        -:   21:int assertion(int a); 
+        -:   22:
+        -:   23:// set NOISY_TEST to 0 to remove printfs from output
+        -:   24:#define NOISY_TEST 1
+        -:   25:
+function main called 1 returned 100% blocks executed 74%
+        1:   26:int main() {
+        1:   27:    int testsPassed=1;
+        -:   28:    int i;
+        1:   29:    int seed = 1000;
+        1:   30:    int numPlayer = 2;
+        -:   31:    //int maxBonus = 10;
+        1:   32:    int p=0, handCount=20;
+        1:   33:    int k[10] = {adventurer, council_room, feast, gardens, mine
+        -:   34:               , remodel, smithy, village, baron, great_hall};
+        -:   35:    struct gameState G;
+        -:   36:    //int maxHandCount = 5;
+        1:   37:    int maxDeckCount = 5;
+        -:   38:
+        -:   39:    int cards[MAX_HAND]; 
+        -:   40:    
+        1:   41:    int card = copper;
+       21:   42:    for (i = 0; i < handCount; i++)
+branch  0 taken 95%
+branch  1 taken 5% (fallthrough)
+        -:   43:    {
+       20:   44:        cards[i] = card;
+        -:   45:    }
+        -:   46:
+        1:   47:    printf ("TESTING fullDeckCount():\n\n");
+call    0 returned 100%
+        1:   48:    memset(&G, 23, sizeof(struct gameState));   // clear the game state
+        1:   49:    initializeGame(numPlayer, k, seed, &G); // initialize a new game
+call    0 returned 100%
+        1:   50:    G.handCount[p] = handCount;                 // set the number of cards on hand
+        1:   51:    memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to copper 
+        -:   52:
+        -:   53:
+        -:   54:/***************************TEST 1*******************************/
+        -:   55:         /**Check if intial count for cards are accurate*/
+        -:   56:
+        -:   57:#if (NOISY_TEST == 1)
+        1:   58:    printf("Test 1 - check initial count.\nShould be deck = %d, hand = %d, and discard = %d\n\n", maxDeckCount, handCount, 0);
+call    0 returned 100%
+        -:   59:#endif
+        -:   60:
+        1:   61:    fullDeckCount(p, card, &G); 
+call    0 returned 100%
+        -:   62:
+        1:   63:    if(G.deckCount[p] != maxDeckCount){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   64:        testsPassed = 0;
+    #####:   65:        printf("Deck count should be = %d, but is %d\n\n", maxDeckCount, G.deckCount[p]);
+call    0 never executed
+        1:   66:    } else if (G.handCount[p] != handCount) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   67:        testsPassed = 0;
+    #####:   68:        printf("Hand count should be = %d, but is %d\n\n", handCount, G.handCount[p]);
+call    0 never executed
+        1:   69:    } else if (G.discardCount[p] != 0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   70:        testsPassed = 0;
+    #####:   71:        printf("Discard count should be = %d, but is %d\n\n", 0, G.discardCount[p]); 
+call    0 never executed
+        -:   72:    }
+        -:   73:
+        -:   74:/***************************TEST 2*******************************/
+        -:   75:         /**Draw 3 cards and check if count is accurate*/
+        -:   76:
+        -:   77:#if (NOISY_TEST == 1)
+        1:   78:    printf("Test 2 - draw 3 cards.\nShould be deck = %d, hand = %d, and discard = %d\n\n", maxDeckCount-3, handCount+3, 0);
+call    0 returned 100%
+        -:   79:#endif
+        1:   80:    drawCard(p, &G);
+call    0 returned 100%
+        1:   81:    drawCard(p, &G);
+call    0 returned 100%
+        1:   82:    drawCard(p, &G);
+call    0 returned 100%
+        -:   83:
+        1:   84:    fullDeckCount(p, card, &G); 
+call    0 returned 100%
+        -:   85:
+        1:   86:    if(G.deckCount[p] != maxDeckCount-3){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   87:        testsPassed = 0;
+    #####:   88:        printf("Deck count should be = %d, but is %d\n\n", maxDeckCount-3, G.deckCount[p]);
+call    0 never executed
+        1:   89:    } else if (G.handCount[p] != handCount+3) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   90:        testsPassed = 0;
+    #####:   91:        printf("Hand count should be = %d, but is %d\n\n", handCount+3, G.handCount[p]);
+call    0 never executed
+        1:   92:    } else if (G.discardCount[p] != 0) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:   93:        testsPassed = 0;
+    #####:   94:        printf("Discard count should be = %d, but is %d\n\n", 0, G.discardCount[p]); 
+call    0 never executed
+        -:   95:    }
+        -:   96:
+        -:   97:/***************************TEST 3*******************************/
+        -:   98:         /**Discard 2 cards and check if count is accurate*/
+        -:   99:
+        -:  100:#if (NOISY_TEST == 1)
+        1:  101:    printf("Test 3 - add 2 cards to discard pile.\nShould be deck = %d, hand = %d, and discard = %d\n\n", maxDeckCount-3, handCount+3, 2);
+call    0 returned 100%
+        -:  102:#endif
+        1:  103:    gainCard(0, &G, 0, p);
+call    0 returned 100%
+        1:  104:    gainCard(1, &G, 0, p);
+call    0 returned 100%
+        -:  105:
+        1:  106:    fullDeckCount(p, card, &G); 
+call    0 returned 100%
+        -:  107:
+        1:  108:    if(G.deckCount[p] != maxDeckCount-3){
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  109:        testsPassed = 0;
+    #####:  110:        printf("ERROR: Deck count should be = %d, but is %d\n\n", maxDeckCount-3, G.deckCount[p]);
+call    0 never executed
+        1:  111:    } else if (G.handCount[p] != handCount+3) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  112:        testsPassed = 0;
+    #####:  113:        printf("ERROR: Hand count should be = %d, but is %d\n\n", handCount+3, G.handCount[p]);
+call    0 never executed
+        1:  114:    } else if (G.discardCount[p] != 2) {
+branch  0 taken 0% (fallthrough)
+branch  1 taken 100%
+    #####:  115:        testsPassed = 0;
+    #####:  116:        printf("ERROR: Discard count should be = %d, but is %d\n\n", 2, G.discardCount[p]); 
+call    0 never executed
+        -:  117:    }
+        -:  118:
+        -:  119:    
+        1:  120:    if(testsPassed) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        1:  121:        printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
+call    0 returned 100%
+        -:  122:    } else {
+    #####:  123:        printf("\nTEST FAILURES DETECTED\n");
+call    0 never executed
+        -:  124:    } 
+        -:  125:
+        1:  126:    return 0;
+        -:  127:}
+        -:  128:
+        -:  129:
+        -:  130:/************************************************************************* 
+        -:  131: * Description: Custom assertion function to be able to use with coverage
+        -:  132: * programs (does not stop program).
+        -:  133: * @param a - test conditional statement; false == 0, true >= 1.
+        -:  134: *************************************************************************/
+function assertion called 0 returned 0% blocks executed 0%
+    #####:  135:int assertion(int a) {
+    #####:  136:    if(a<=0) {
+branch  0 never executed
+branch  1 never executed
+    #####:  137:        printf("TEST FAILED! ");    
+call    0 never executed
+    #####:  138:        return 0;
+        -:  139:    }
+        -:  140:
+        -:  141:#if (NOISY_TEST == 1)
+    #####:  142:    printf("TEST PASSED\n\n");    
+call    0 never executed
+        -:  143:#endif
+    #####:  144:    return 1;
+        -:  145:}

@@ -1,0 +1,156 @@
+        -:    0:Source:unittest2.c
+        -:    0:Graph:unittest2.gcno
+        -:    0:Data:unittest2.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:/************************************************************************* 
+        -:    2: * Program: unittest2
+        -:    3: * Author: Long Le
+        -:    4: * Date: 26-Oct-2018 
+        -:    5: * Class: CS362
+        -:    6: * Instructor: Jaki Shaik
+        -:    7: * Assignment 3 
+        -:    8: * Description: Unit test program for function shuffle().
+        -:    9: * Test to see if shuffle() function shuffles the deck.
+        -:   10: * NOTE: testUpdateCoins.c was used as a base template.
+        -:   11: *************************************************************************/
+        -:   12:
+        -:   13:#include "dominion.h"
+        -:   14:#include "dominion_helpers.h"
+        -:   15:#include <string.h>
+        -:   16:#include <stdio.h>
+        -:   17:#include "rngs.h"
+        -:   18:
+        -:   19:int assertion(int a); 
+        -:   20:
+        -:   21:// set NOISY_TEST to 0 to remove printfs from output
+        -:   22:#define NOISY_TEST 1
+        -:   23:
+function main called 1 returned 100% blocks executed 88%
+        1:   24:int main() {
+        1:   25:    int testsPassed=0;
+        -:   26:    int i;
+        1:   27:    int seed = 1000;
+        1:   28:    int numPlayer = 2;
+        -:   29:    //int maxBonus = 10;
+        1:   30:    int p=0, handCount=0;
+        1:   31:    int k[10] = {adventurer, council_room, feast, gardens, mine
+        -:   32:               , remodel, smithy, village, baron, great_hall};
+        -:   33:    struct gameState G;
+        -:   34:    //int maxHandCount = 5;
+        1:   35:    const int maxDeckCount = 4;
+        -:   36:
+        -:   37:    int cards[MAX_HAND]; 
+        -:   38:    
+       1*:   39:    for (i = 0; i < handCount; i++)
+branch  0 taken 0%
+branch  1 taken 100% (fallthrough)
+        -:   40:    {
+    #####:   41:        cards[i] = smithy;
+        -:   42:    }
+        -:   43:
+        1:   44:    printf ("TESTING shuffle():\n");
+call    0 returned 100%
+        1:   45:    memset(&G, 23, sizeof(struct gameState));   // clear the game state
+        1:   46:    initializeGame(numPlayer, k, seed, &G); // initialize a new game
+call    0 returned 100%
+        1:   47:    G.handCount[p] = handCount;                 // set the number of cards on hand
+        1:   48:    memcpy(G.hand[p], cards, sizeof(int) * handCount); // set all the cards to adventurer 
+        -:   49:    
+        -:   50:    // Clear all treasure cards.
+        -:   51:    //int count;
+        -:   52:    //for(count=0; count<maxDeckCount; count++) {
+        -:   53:    //    G.deck[p][count] = count; 
+        -:   54:    //}
+        -:   55:     
+        1:   56:    G.deck[p][0] = 4; 
+        1:   57:    G.deck[p][1] = 6; 
+        1:   58:    G.deck[p][2] = 9; 
+        1:   59:    G.deck[p][3] = 0; 
+        -:   60:
+        1:   61:    G.deckCount[p] = maxDeckCount; // reset
+        -:   62:   
+        -:   63:/***************************TEST 1*******************************/
+        -:   64:      /**Check to see if cards in deck were shuffled*/
+        -:   65:
+        -:   66:#if (NOISY_TEST == 1)
+        1:   67:    printf("\nTest 1 - verify that shuffle will work\n");
+call    0 returned 100%
+        -:   68:#endif
+        1:   69:    int ary[maxDeckCount];
+        -:   70:
+        -:   71:#if (NOISY_TEST == 1)
+        1:   72:    printf("\nInitial deck:");
+call    0 returned 100%
+        -:   73:#endif
+        -:   74:    // copy into temp array.
+        5:   75:    for(i=0; i<maxDeckCount; i++) {
+branch  0 taken 80%
+branch  1 taken 20% (fallthrough)
+        4:   76:        ary[i] = G.deck[p][i];
+        -:   77:#if (NOISY_TEST == 1)
+        4:   78:        printf("%d ", ary[i]);
+call    0 returned 100%
+        -:   79:#endif
+        -:   80:    }
+        -:   81:
+        1:   82:    shuffle(p, &G);
+call    0 returned 100%
+        -:   83:
+        -:   84:#if (NOISY_TEST == 1)
+        1:   85:    printf("\nShuffled deck:");
+call    0 returned 100%
+        -:   86:#endif
+        5:   87:    for(i=0; i<maxDeckCount; i++) {
+branch  0 taken 80%
+branch  1 taken 20% (fallthrough)
+        -:   88:#if (NOISY_TEST == 1)
+        4:   89:        printf("%d ", G.deck[p][i]);
+call    0 returned 100%
+        -:   90:#endif
+        4:   91:        if(ary[i] != G.deck[p][i]) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        4:   92:           testsPassed = 1;
+        -:   93:        } else {
+        -:   94:#if (NOISY_TEST == 1)
+    #####:   95:           printf("\nFailed! %d\n", G.deck[p][i]);
+call    0 never executed
+        -:   96:#endif
+        -:   97:        }
+        -:   98:    }
+        -:   99:
+        1:  100:    if(testsPassed) {
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        1:  101:        printf("\nALL TESTS SUCCESSFULLY PASSED!\n");
+call    0 returned 100%
+        -:  102:    } else {
+    #####:  103:        printf("\nTEST FAILURES DETECTED\n");
+call    0 never executed
+        -:  104:    } 
+        -:  105:
+        1:  106:    return 0;
+        -:  107:}
+        -:  108:
+        -:  109:/************************************************************************* 
+        -:  110: * Description: Custom assertion function to be able to use with coverage
+        -:  111: * programs (does not stop program).
+        -:  112: * @param a - test conditional statement; false == 0, true >= 1.
+        -:  113: *************************************************************************/
+function assertion called 0 returned 0% blocks executed 0%
+    #####:  114:int assertion(int a) {
+    #####:  115:    if(a<=0) {
+branch  0 never executed
+branch  1 never executed
+    #####:  116:        printf("TEST FAILED! ");    
+call    0 never executed
+    #####:  117:        return 0;
+        -:  118:    }
+        -:  119:
+        -:  120:#if (NOISY_TEST == 1)
+    #####:  121:    printf("TEST PASSED\n");    
+call    0 never executed
+        -:  122:#endif
+    #####:  123:    return 1;
+        -:  124:}

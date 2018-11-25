@@ -1,0 +1,202 @@
+Result for running dominion unit tests:
+unittest1.c:
+TESTING fullDeckCount():
+
+Test 1 - check initial count.
+Should be deck = 5, hand = 20, and discard = 0
+
+Test 2 - draw 3 cards.
+Should be deck = 2, hand = 23, and discard = 0
+
+Test 3 - add 2 cards to discard pile.
+Should be deck = 2, hand = 23, and discard = 2
+
+
+ALL TESTS SUCCESSFULLY PASSED!
+File 'unittest1.c'
+Lines executed:60.32% of 63
+Branches executed:91.67% of 24
+Taken at least once:50.00% of 24
+Calls executed:53.85% of 26
+Creating 'unittest1.c.gcov'
+
+unittest2.c:
+TESTING shuffle():
+
+Test 1 - verify that shuffle will work
+
+Initial deck:4 6 9 0 
+Shuffled deck:0 4 6 9 
+ALL TESTS SUCCESSFULLY PASSED!
+File 'unittest2.c'
+Lines executed:78.57% of 42
+Branches executed:83.33% of 12
+Taken at least once:58.33% of 12
+Calls executed:69.23% of 13
+Creating 'unittest2.c.gcov'
+
+unittest3.c:
+TESTING isGameOver():
+
+Test 1 - verify the game ends if there are no more province cards
+TEST PASSED
+
+Test 2 - verify the game ends if there are 3 empty supply piles
+TEST PASSED
+
+Test 3 - verify the game continues if there are province cards
+ and if there are less than 3 supply piles empty. 
+TEST PASSED
+
+ALL TESTS SUCCESSFULLY PASSED!
+File 'unittest3.c'
+Lines executed:75.00% of 40
+Branches executed:100.00% of 12
+Taken at least once:50.00% of 12
+Calls executed:72.22% of 18
+Creating 'unittest3.c.gcov'
+
+unittest4.c:
+TESTING drawCard():
+
+Test 1 - verify cards are drawn from the player's deck to the player's hand
+Testing with 5 cards in the deck
+TEST PASSED
+TEST PASSED
+TEST PASSED
+TEST PASSED
+TEST PASSED
+TEST PASSED
+TEST PASSED
+TEST PASSED
+TEST PASSED
+TEST PASSED
+
+Test 2 - verify cards once deck is empty, discarded cards are shuffled into deck
+5 cards are added to the discard pile
+TEST PASSED
+TEST PASSED
+TEST PASSED
+
+ALL TESTS SUCCESSFULLY PASSED!
+File 'unittest4.c'
+Lines executed:74.07% of 54
+Branches executed:100.00% of 22
+Taken at least once:63.64% of 22
+Calls executed:68.18% of 22
+Creating 'unittest4.c.gcov'
+
+cardtest1.c:
+cardtest1 segmentation faults - will not be run
+File 'cardtest1.c'
+Lines executed:0.00% of 70
+Branches executed:0.00% of 26
+Taken at least once:0.00% of 26
+Calls executed:0.00% of 24
+Creating 'cardtest1.c.gcov'
+
+cardtest2.c:
+TESTING smithy card effects:
+
+Test 1 - verify players' drawn cards
+Player 0 card on hand count is: 3
+TEST PASSED
+
+Player 1 card on hand count is: 0
+TEST PASSED
+
+
+Test 2 - verify if the user's deck was drawn from
+TEST PASSED
+
+Test 3 - verify if the victory card or kingdom card piles were not changed
+
+Testing count of victory cards.
+TEST PASSED
+
+Testing kingdom card #0
+TEST PASSED
+
+Testing kingdom card #1
+TEST PASSED
+
+Testing kingdom card #2
+TEST PASSED
+
+Testing kingdom card #3
+TEST PASSED
+
+Testing kingdom card #4
+TEST PASSED
+
+Testing kingdom card #5
+TEST PASSED
+
+Testing kingdom card #6
+TEST PASSED
+
+Testing kingdom card #7
+TEST PASSED
+
+Testing kingdom card #8
+TEST PASSED
+
+Testing kingdom card #9
+TEST PASSED
+
+ALL TESTS SUCCESSFULLY PASSED!
+File 'cardtest2.c'
+Lines executed:80.28% of 71
+Branches executed:100.00% of 30
+Taken at least once:73.33% of 30
+Calls executed:70.83% of 24
+Creating 'cardtest2.c.gcov'
+
+cardtest3.c:
+TESTING Treasure Map card effects:
+
+Test 1a - only 1 treasure map in player's hand
+
+TEST PASSED
+
+Test 1b - 2 treasure map cards in player's hand
+TEST FAILED! 
+ERROR: original gold count is 0 and current gold count is 0
+ERROR: 4 gold cards should be received into deck
+
+TEST FAILURES DETECTED
+File 'cardtest3.c'
+Lines executed:85.71% of 70
+Branches executed:100.00% of 34
+Taken at least once:73.53% of 34
+Calls executed:77.78% of 18
+Creating 'cardtest3.c.gcov'
+
+cardtest4.c:
+TESTING Council Room Card:
+
+Test 1 - verify players' drawn cards
+Player 0 card on hand count is: 4
+TEST PASSED
+
+Player 1 card on hand count is: 1
+TEST PASSED
+
+Test 2 - verify if the user's deck was drawn from
+TEST PASSED
+
+ALL TESTS SUCCESSFULLY PASSED!
+File 'cardtest4.c'
+Lines executed:82.14% of 56
+Branches executed:100.00% of 24
+Taken at least once:75.00% of 24
+Calls executed:68.75% of 16
+Creating 'cardtest4.c.gcov'
+
+File 'dominion.c'
+Lines executed:28.97% of 604
+Branches executed:33.98% of 415
+Taken at least once:24.34% of 415
+Calls executed:17.00% of 100
+Creating 'dominion.c.gcov'
+
