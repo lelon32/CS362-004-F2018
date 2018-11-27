@@ -42,7 +42,7 @@ function main called 1 returned 100% blocks executed 81%
         -:   36:
         -:   37:    int cards[MAX_HAND]; 
         -:   38:    
-       1*:   39:    for (i = 0; i < handCount; i++)
+        1:   39:    for (i = 0; i < handCount; i++)
 branch  0 taken 0%
 branch  1 taken 100% (fallthrough)
         -:   40:    {
@@ -97,7 +97,7 @@ branch  1 taken 100%
         -:   78:
         1:   79:    printf("\n");
 call    0 returned 100%
-       1*:   80:    for(i=0; i<G.handCount[playerBeingTested]; i++) {
+        1:   80:    for(i=0; i<G.handCount[playerBeingTested]; i++) {
 branch  0 taken 0%
 branch  1 taken 100% (fallthrough)
     #####:   81:        printf("cards: %d ", i);

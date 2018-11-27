@@ -6,14 +6,14 @@ rngs.o: rngs.h rngs.c
 dominion.o: dominion.h dominion.c rngs.o
 	gcc -c dominion.c -g  $(CFLAGS)
 
-randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
-	gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
-
-randomtestsmithy: randomtestsmithy.c dominion.o rngs.o
-	gcc -o randomtestsmithy -g  randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
-
-randomtesttreasuremap: randomtesttreasuremap.c dominion.o rngs.o
-	gcc -o randomtesttreasuremap -g  randomtesttreasuremap.c dominion.o rngs.o $(CFLAGS)
+#randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
+#	gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
+#
+#randomtestsmithy: randomtestsmithy.c dominion.o rngs.o
+#	gcc -o randomtestsmithy -g  randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
+#
+#randomtesttreasuremap: randomtesttreasuremap.c dominion.o rngs.o
+#	gcc -o randomtesttreasuremap -g  randomtesttreasuremap.c dominion.o rngs.o $(CFLAGS)
 
 playdom: dominion.o playdom.c
 	gcc -o playdom playdom.c -g dominion.o rngs.o $(CFLAGS)
@@ -91,24 +91,24 @@ testresults: unittest2.c unittest3.c unittest4.c cardtest1.c cardtest2.c cardtes
 
 
 # Random testing instruction
+randomtestadventurer: randomtestadventurer.c dominion.o rngs.o
+	gcc -o randomtestadventurer -g  randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
 	echo "Result for running adventurer random tests:" > randomtestadventurer.out
-
 	echo "randomtestadventurer.c:" >> randomtestadventurer.out
-	gcc -o randomtestadventurer -g randomtestadventurer.c dominion.o rngs.o $(CFLAGS)
 	./randomtestadventurer >> randomtestadventurer.out
 	gcov randomtestadventurer.c -b >> randomtestadventurer.out
-
+	
+randomtestsmithy: randomtestsmithy.c dominion.o rngs.o
+	gcc -o randomtestsmithy -g  randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
 	echo "Result for running smithy random tests:" > randomtestsmithy.out
-
 	echo "randomtestsmithy.c:" >> randomtestsmithy.out
-	gcc -o randomtestsmithy -g randomtestsmithy.c dominion.o rngs.o $(CFLAGS)
 	./randomtestsmithy >> randomtestsmithy.out
 	gcov randomtestsmithy.c -b >> randomtestsmithy.out
-
+	
+randomtesttreasuremap: randomtesttreasuremap.c dominion.o rngs.o
+	gcc -o randomtesttreasuremap -g  randomtesttreasuremap.c dominion.o rngs.o $(CFLAGS)
 	echo "Result for running treasuremap random tests:" > randomtesttreasuremap.out
-
 	echo "randomtesttreasuremap.c:" >> randomtesttreasuremap.out
-	gcc -o randomtesttreasuremap -g randomtesttreasuremap.c dominion.o rngs.o $(CFLAGS)
 	./randomtesttreasuremap >> randomtesttreasuremap.out
 	gcov randomtesttreasuremap.c -b >> randomtesttreasuremap.out
 
@@ -119,4 +119,4 @@ randomtestsmithy: randomtestsmithy
 randomtesttreasuremap: randomtesttreasuremap
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer randomtestsmithy randomtesttreasuremap
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestadventurer randomtestsmithy randomtesttreasuremap cardtest1 cardtest2 cardtest3 cardtest4 unittest1 unittest2 unittest3 unittest4

@@ -279,7 +279,7 @@ branch  1 taken 100%
 call    0 returned 100%
         -:  212:  /* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
         -:  213:
-      164:  214:  while (state->deckCount[player] > 0) {
+      180:  214:  while (state->deckCount[player] > 0) {
 branch  0 taken 90%
 branch  1 taken 10% (fallthrough)
       148:  215:    card = floor(Random() * state->deckCount[player]);
@@ -453,7 +453,7 @@ branch  1 taken 0%
 branch  0 taken 40%
 branch  1 taken 60% (fallthrough)
         -:  339:    {
-       2*:  340:      if (state->discard[player][i] == card) count++;
+        2:  340:      if (state->discard[player][i] == card) count++;
 branch  0 taken 0% (fallthrough)
 branch  1 taken 100%
         -:  341:    }

@@ -43,7 +43,7 @@ function main called 1 returned 100% blocks executed 81%
         -:   37:
         -:   38:    int cards[MAX_HAND]; 
         -:   39:    
-       1*:   40:    for (i = 0; i < handCount; i++)
+        1:   40:    for (i = 0; i < handCount; i++)
 branch  0 taken 0%
 branch  1 taken 100% (fallthrough)
         -:   41:    {
