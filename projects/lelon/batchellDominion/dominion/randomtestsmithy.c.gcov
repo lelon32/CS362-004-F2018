@@ -127,49 +127,49 @@ branch  1 taken 50%
    100000:  101:                if(setDeckCount >= 3) { 
 branch  0 taken 50% (fallthrough)
 branch  1 taken 50%
-    49740:  102:                    testResults = assertion(G.handCount[playerBeingTested] == 3);
+    49819:  102:                    testResults = assertion(G.handCount[playerBeingTested] == 3);
 call    0 returned 100%
         -:  103:
-    49740:  104:                    if(!testResults) {
+    49819:  104:                    if(!testResults) {
 branch  0 taken 0% (fallthrough)
 branch  1 taken 100%
     #####:  105:                        printf("\nTest %d ERROR: Player %d should have drawn 3 cards!\n", n+1, playerBeingTested);
 call    0 never executed
     #####:  106:                        testsPassed = 0;
         -:  107:                    }
-    50260:  108:                } else if(setDeckCount == 2){
+    50181:  108:                } else if(setDeckCount == 2){
 branch  0 taken 33% (fallthrough)
 branch  1 taken 67%
-    16681:  109:                    testResults = assertion(G.handCount[playerBeingTested] == 2);
+    16699:  109:                    testResults = assertion(G.handCount[playerBeingTested] == 2);
 call    0 returned 100%
         -:  110:
-    16681:  111:                    if(!testResults) {
+    16699:  111:                    if(!testResults) {
 branch  0 taken 0% (fallthrough)
 branch  1 taken 100%
     #####:  112:                        printf("\nTest %d ERROR: 2 cards in deck! Player %d should have drawn 2 cards!\n", n+1, playerBeingTested);
 call    0 never executed
     #####:  113:                        testsPassed = 0;
         -:  114:                    }
-    33579:  115:                } else if(setDeckCount == 1) {
+    33482:  115:                } else if(setDeckCount == 1) {
 branch  0 taken 50% (fallthrough)
 branch  1 taken 50%
-    16696:  116:                    testResults = assertion(G.handCount[playerBeingTested] == 1);
+    16633:  116:                    testResults = assertion(G.handCount[playerBeingTested] == 1);
 call    0 returned 100%
         -:  117:
-    16696:  118:                    if(!testResults) {
+    16633:  118:                    if(!testResults) {
 branch  0 taken 0% (fallthrough)
 branch  1 taken 100%
     #####:  119:                        printf("\nTest %d ERROR: Only 1 card in deck! Player %d should have drawn 1 card!\n", n+1, playerBeingTested);
 call    0 never executed
     #####:  120:                        testsPassed = 0;
         -:  121:                    }
-    16883:  122:                } else if(setDeckCount < 1) {
+    16849:  122:                } else if(setDeckCount < 1) {
 branch  0 taken 100% (fallthrough)
 branch  1 taken 0%
-    16883:  123:                    testResults = assertion(G.handCount[playerBeingTested] == 0);
+    16849:  123:                    testResults = assertion(G.handCount[playerBeingTested] == 0);
 call    0 returned 100%
         -:  124:
-    16883:  125:                    if(!testResults) {
+    16849:  125:                    if(!testResults) {
 branch  0 taken 0% (fallthrough)
 branch  1 taken 100%
     #####:  126:                        printf("\nTest %d ERROR: 0 cards in deck! Player %d should have drawn 0 cards!\n", n+1, playerBeingTested);
@@ -202,9 +202,9 @@ call    0 returned 100%
    100000:  147:        if(!testResults) {
 branch  0 taken 17% (fallthrough)
 branch  1 taken 83%
-    16883:  148:            printf("Test %d ERROR: Player %d's deck was not drawn from!\n", n+1, playerBeingTested);
+    16849:  148:            printf("Test %d ERROR: Player %d's deck was not drawn from!\n", n+1, playerBeingTested);
 call    0 returned 100%
-    16883:  149:            testsPassed = 0;
+    16849:  149:            testsPassed = 0;
         -:  150:        } 
         -:  151:
    100000:  152:        printf("\n");
@@ -237,11 +237,11 @@ branch  1 taken 94%
         -:  171:#if (NOISY_TEST == 1)
         -:  172:        printf("TEST FAILED! ");    
         -:  173:#endif
-    16883:  174:        return 0;
+    16849:  174:        return 0;
         -:  175:    }
         -:  176:
         -:  177:#if (NOISY_TEST == 1)
         -:  178:    printf("TEST PASSED\n");    
         -:  179:#endif
-   283117:  180:    return 1;
+   283151:  180:    return 1;
         -:  181:}

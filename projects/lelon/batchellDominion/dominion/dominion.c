@@ -678,7 +678,7 @@ int smithyEffect(int handPos, struct gameState *state)
     drawCard(currentPlayer, state);
   }
 
-  discardCard(currentPlayer, handPos, state, 0); // bug -- switched currentPlayer and handPos
+  discardCard(handPos, currentPlayer, state, 0); // bug -- switched currentPlayer and handPos
   return 0;
 }
 

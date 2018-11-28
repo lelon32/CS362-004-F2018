@@ -945,7 +945,7 @@ branch  1 taken 25% (fallthrough)
 call    0 returned 100%
         -:  679:  }
         -:  680:
-        1:  681:  discardCard(currentPlayer, handPos, state, 0); // bug -- switched currentPlayer and handPos
+        1:  681:  discardCard(handPos, currentPlayer, state, 0); // bug -- switched currentPlayer and handPos
 call    0 returned 100%
         1:  682:  return 0;
         -:  683:}
