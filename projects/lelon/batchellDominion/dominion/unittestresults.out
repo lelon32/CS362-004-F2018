@@ -89,11 +89,10 @@ Creating 'unittest4.c.gcov'
 cardtest1.c:
 cardtest1 segmentation faults - will not be run
 File 'cardtest1.c'
-Lines executed:0.00% of 70
-Branches executed:0.00% of 26
-Taken at least once:0.00% of 26
-Calls executed:0.00% of 24
-Creating 'cardtest1.c.gcov'
+No executable lines
+No branches
+No calls
+Removing 'cardtest1.c.gcov'
 
 cardtest2.c:
 TESTING smithy card effects:
@@ -194,9 +193,9 @@ Calls executed:68.75% of 16
 Creating 'cardtest4.c.gcov'
 
 File 'dominion.c'
-Lines executed:28.97% of 604
-Branches executed:33.98% of 415
-Taken at least once:24.34% of 415
+Lines executed:28.93% of 605
+Branches executed:33.81% of 417
+Taken at least once:24.22% of 417
 Calls executed:17.00% of 100
 Creating 'dominion.c.gcov'
 

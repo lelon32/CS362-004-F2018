@@ -654,7 +654,7 @@ int adventurerEffect(int *drawntreasure, struct gameState *state, int *temphandc
     }
     drawCard(currentPlayer, state);
     cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer]-1];
-    if(cardDrawn == copper || cardDrawn == silver) // bug -- only detects copper and silver as treasure
+    if(cardDrawn == copper || cardDrawn == silver || cardDrawn == gold) // bug -- only detects copper and silver as treasure
       drawntreasure++;
     else{
       temphand[*temphandct] = cardDrawn;
@@ -664,6 +664,7 @@ int adventurerEffect(int *drawntreasure, struct gameState *state, int *temphandc
   }
   while(*temphandct-1>=0){
     state->discard[currentPlayer][state->discardCount[currentPlayer]++]=temphand[*temphandct-1];
+    (*temphandct)--;
   }
   return 0;
 }
